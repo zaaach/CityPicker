@@ -5,8 +5,8 @@
 ![效果图.gif](https://github.com/zaaach/CityPicker/raw/master/screenshot/screenshot.gif)
 
 ###使用方法
-1. Add the JitPack repository to your build file
-```
+#### 1. Add the JitPack repository to your build file
+```java
 allprojects {
 		repositories {
 			...
@@ -14,14 +14,15 @@ allprojects {
 		}
 	}
   ```
-2. Add the dependency
-```
+#### 2. Add the dependency
+
+```java
 dependencies {
 	        compile 'com.github.GoSkyer:CityPicker:0.1'
 	}
   ```
+#### 3. 修改高德地图apikey 为自己的
 
-3. 修改高德地图apikey 为自己的
 ```
 defaultConfig {
        .....
@@ -31,9 +32,10 @@ defaultConfig {
         ]
     }
     ```
-4.界面为CityPickerFragment,引入即可。
+    
+#### 4.界面为CityPickerFragment,引入即可。
 
-5.城市选择事件回调
+#### 5.城市选择事件回调
 ```
 cityPickerfragment.setOnCityChoseListener(new CityPickerFragment.OnCityChoseListener() {
             @Override
@@ -41,4 +43,4 @@ cityPickerfragment.setOnCityChoseListener(new CityPickerFragment.OnCityChoseList
                 Log.i("TAG", "Onclick: " + city);
             }
         });
-        ```
+```
