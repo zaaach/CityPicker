@@ -21,7 +21,7 @@
         <service android:name="com.amap.api.location.APSService"/>
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="{amapkey}"/>
+            android:value="${amapkey}"/>
         <!--高德地图定位结束-->
     </application>
 
