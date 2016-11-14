@@ -6,8 +6,6 @@
     android:orientation="vertical"
     android:background="@color/content_bg">
 
-    <include layout="@layout/common_title_bar"/>
-
     <include layout="@layout/view_search"/>
 
     <RelativeLayout

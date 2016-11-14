@@ -7,7 +7,7 @@
     android:gravity="center_horizontal"
     android:background="@android:color/white"
     android:visibility="gone"
-    tools:showIn="@layout/activity_city_list">
+    tools:showIn="@layout/fragment_city_list">
 
     <TextView
         android:layout_width="wrap_content"

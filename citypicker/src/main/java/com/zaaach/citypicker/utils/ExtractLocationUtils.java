@@ -3,7 +3,7 @@ package com.zaaach.citypicker.utils;
 /**
  * author zaaach on 2016/1/26.
  */
-public class StringUtils {
+public class ExtractLocationUtils {
     /**
      * 提取出城市或者县
      * @param city
