@@ -3,3 +3,42 @@
 
 ###效果图.gif
 ![效果图.gif](https://github.com/zaaach/CityPicker/raw/master/screenshot/screenshot.gif)
+
+###使用方法
+1. Add the JitPack repository to your build file
+```
+allprojects {
+		repositories {
+			...
+			maven { url "https://jitpack.io" }
+		}
+	}
+  ```
+2. Add the dependency
+```
+dependencies {
+	        compile 'com.github.GoSkyer:CityPicker:0.1'
+	}
+  ```
+
+3. 修改高德地图apikey 为自己的
+```
+defaultConfig {
+       .....
+        manifestPlaceholders = [
+                // 这里需要换成:你的AppId
+                "amapkey": "****",
+        ]
+    }
+    ```
+4.界面为CityPickerFragment,引入即可。
+
+5.城市选择事件回调
+```
+cityPickerfragment.setOnCityChoseListener(new CityPickerFragment.OnCityChoseListener() {
+            @Override
+            public void Onclick(String city) {
+                Log.i("TAG", "Onclick: " + city);
+            }
+        });
+        ```
