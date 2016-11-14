@@ -32,5 +32,17 @@ defaultConfig {
     }
 
 ```
-    
+
+#### 4.界面为CityPickerFragment,引入即可。
+
+#### 5.城市选择事件回调
+
+```java
+cityPickerfragment.setOnCityChoseListener(new CityPickerFragment.OnCityChoseListener() {
+            @Override
+            public void Onclick(String city) {
+                Log.i("TAG", "Onclick: " + city);
+            }
+        });
+```
 
