@@ -22,7 +22,6 @@ dependencies {
 	}
   ```
 #### 3. 修改高德地图apikey 为自己的
-
 ```java
 defaultConfig {
        .....
@@ -31,16 +30,7 @@ defaultConfig {
                 "amapkey": "****",
         ]
     }
-    ```
-    
-#### 4.界面为CityPickerFragment,引入即可。
 
-#### 5.城市选择事件回调
-```java
-cityPickerfragment.setOnCityChoseListener(new CityPickerFragment.OnCityChoseListener() {
-            @Override
-            public void Onclick(String city) {
-                Log.i("TAG", "Onclick: " + city);
-            }
-        });
 ```
+    
+
