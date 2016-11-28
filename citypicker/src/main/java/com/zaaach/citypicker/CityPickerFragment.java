@@ -1,5 +1,6 @@
 package com.zaaach.citypicker;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,6 +32,8 @@ import com.zaaach.citypicker.utils.ExtractLocationUtils;
 import com.zaaach.citypicker.view.SideLetterBar;
 
 import java.util.List;
+
+import static com.zaaach.citypicker.R.id.listview_all_city;
 
 /**
  * author zaaach on 2016/1/26.
@@ -115,9 +120,24 @@ public class CityPickerFragment extends Fragment {
     }
 
     private void initView() {
-        mListView = (ListView) mRootView.findViewById(R.id.listview_all_city);
+        mListView = (ListView) mRootView.findViewById(listview_all_city);
         mListView.setAdapter(mCityAdapter);
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+                View view = getActivity().getCurrentFocus();
+                if (view == null) {
+                    view = new View(getActivity());
+                }
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
 
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+            }
+        });
         TextView overlay = (TextView) mRootView.findViewById(R.id.tv_letter_overlay);
         mLetterBar = (SideLetterBar) mRootView.findViewById(R.id.side_letter_bar);
         mLetterBar.setOverlay(overlay);
