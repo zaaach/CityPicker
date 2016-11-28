@@ -18,7 +18,7 @@ allprojects {
 
 ```java
 dependencies {
-	        compile 'com.github.GoSkyer:CityPicker:0.1'
+	        compile 'com.github.GoSkyer:CityPicker:0.3'
 	}
   ```
 #### 3. 修改高德地图apikey 为自己的
