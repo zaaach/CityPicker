@@ -105,7 +105,6 @@ public class CityPickerFragment extends Fragment {
             @Override
             public void onCityClick(String name) {
                 onCityChoseListener.Onclick(name);
-
             }
 
             @Override
@@ -189,7 +188,22 @@ public class CityPickerFragment extends Fragment {
                 onCityChoseListener.Onclick(mResultAdapter.getItem(position).getName());
             }
         });
+        mResultListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+                View view = getActivity().getCurrentFocus();
+                if (view == null) {
+                    view = new View(getActivity());
+                }
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
 
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+            }
+        });
         clearBtn = (ImageView) mRootView.findViewById(R.id.iv_search_clear);
         backBtn = (ImageView) mRootView.findViewById(R.id.back);
 
