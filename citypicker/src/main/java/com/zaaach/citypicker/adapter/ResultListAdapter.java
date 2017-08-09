@@ -16,12 +16,14 @@ import java.util.List;
  * author zaaach on 2016/1/26.
  */
 public class ResultListAdapter extends BaseAdapter {
-    private Context mContext;
+    private WeakReference<Context> mContext;
+//     private Context mContext;
     private List<City> mCities;
 
     public ResultListAdapter(Context mContext, List<City> mCities) {
         this.mCities = mCities;
-        this.mContext = mContext;
+//         this.mContext = mContext;
+        this.mContext = new WeakReference<>(mContext);
     }
 
     public void changeData(List<City> list){
@@ -53,7 +55,7 @@ public class ResultListAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup parent) {
         ResultViewHolder holder;
         if (view == null){
-            view = LayoutInflater.from(mContext).inflate(R.layout.cp_item_search_result_listview, parent, false);
+            view = LayoutInflater.from(mContext.get()).inflate(R.layout.cp_item_search_result_listview, parent, false);
             holder = new ResultViewHolder();
             holder.name = (TextView) view.findViewById(R.id.tv_item_result_listview_name);
             view.setTag(holder);
