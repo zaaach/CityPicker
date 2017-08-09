@@ -28,11 +28,23 @@
 
 创建Activity引入**CityPickerFragment**;
 
-  > cityPickerFragment = new CityPickerFragment();
-  > getSupportFragmentManager().beginTransaction()
-  >          .add(R.id.fl_activity_city_picker_container, cityPickerFragment).commit();
+```
+ cityPickerFragment = new CityPickerFragment();
+ getSupportFragmentManager().beginTransaction()
+          .add(R.id.fl_activity_city_picker_container, cityPickerFragment).commit();
   
-  
+```
+
+### Step2
+
+定位更新当前位置状态
+
+```
+cityPickerFragment.updateLocateState(LocateState.SUCCESS, location.replaceAll("市", ""));
+```
+
+# 例子
+
 ```
 /**
  * 引用例子
@@ -93,34 +105,4 @@ public class DemoActivity extends AppCompatActivity {
 }
 
 
-```
-
-### Step2
-
-定位更新当前位置状态
-
-> cityPickerFragment.updateLocateState(LocateState.SUCCESS, location.replaceAll("市", ""));
-
-
-```
-  //定位
-        LocationManager.startSingleLocation(new IMapLocationListener() {
-            @Override
-            public void onLocationChanged(AMapLocation aMapLocation) {
-
-                if (aMapLocation.getErrorCode() == 0) {
-                    String city = aMapLocation.getCity();
-                    String district = aMapLocation.getDistrict();
-                    String location = StringUtils.extractLocation(city, district);
-
-                    //定位成功，更新状态
-                    cityPickerFragment.updateLocateState(LocateState.SUCCESS, location.replaceAll("市", ""));
-                } else {
-                    cityPickerFragment.updateLocateState(LocateState.FAILED, null);
-
-                }
-
-
-            }
-        });
 ```
