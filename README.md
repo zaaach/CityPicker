@@ -19,83 +19,108 @@
 
 # Install
 
-Gradle:
-
-```groovy
-compile 'com.zaaach:citypicker:1.1'
-```
-
-or Maven:
-
-```xm
-<dependency>
-  <groupId>com.zaaach</groupId>
-  <artifactId>citypicker</artifactId>
-  <version>1.1</version>
-  <type>pom</type>
-</dependency>
-```
-
-or 下载library手动导入.
+目前没上传，只能
+下载library手动导入.
 
 # Usage
 
-`CityPicker`本身已经引入了高德地图定位sdk.
-
 ### step1:
 
-在你项目的`manifest.xml`中添加开发平台申请的key
+创建Activity引入**CityPickerFragment**;
 
-```xml
-<meta-data android:name="com.amap.api.v2.apikey"
-           android:value="your key"/>
+  > cityPickerFragment = new CityPickerFragment();
+  > getSupportFragmentManager().beginTransaction()
+  >          .add(R.id.fl_activity_city_picker_container, cityPickerFragment).commit();
+  
+  
 ```
-还需要添加`CityPickerActivity`
+/**
+ * 引用例子
+ */
+public class DemoActivity extends AppCompatActivity {
 
-```xml
-<activity
-            android:name="com.zaaach.citypicker.CityPickerActivity"
-            android:theme="@style/CityPicker.NoActionBar"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"/>
+    Toolbar toolbar;
+
+    FrameLayout flCityPickerContainer;
+
+    private CityPickerFragment cityPickerFragment;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_city_picker);
+        initView();
+    }
+
+
+    protected void initView() {
+    
+    //这里
+        cityPickerFragment = new CityPickerFragment();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fl_activity_city_picker_container, cityPickerFragment).commit();
+
+
+        //定位
+        LocationManager.startSingleLocation(new IMapLocationListener() {
+            @Override
+            public void onLocationChanged(AMapLocation aMapLocation) {
+
+                if (aMapLocation.getErrorCode() == 0) {
+                    String city = aMapLocation.getCity();
+                    String district = aMapLocation.getDistrict();
+                    String location = StringUtils.extractLocation(city, district);
+
+                    //定位成功，更新状态
+                    cityPickerFragment.updateLocateState(LocateState.SUCCESS, location.replaceAll("市", ""));
+                } else {
+                    cityPickerFragment.updateLocateState(LocateState.FAILED, null);
+
+                }
+
+
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        //销毁定位
+        LocationManager.stopSingleLocation();
+    }
+}
+
+
 ```
 
 ### Step2
 
-```java
-private static final int REQUEST_CODE_PICK_CITY = 0;
-//启动
-startActivityForResult(new Intent(MainActivity.this, CityPickerActivity.class),
-                        REQUEST_CODE_PICK_CITY);
+定位更新当前位置状态
 
-//重写onActivityResult方法
-@Override
-protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (requestCode == REQUEST_CODE_PICK_CITY && resultCode == RESULT_OK){
-        if (data != null){
-            String city = data.getStringExtra(CityPickerActivity.KEY_PICKED_CITY);
-            resultTV.setText("当前选择：" + city);
-        }
-    }
-}
+> cityPickerFragment.updateLocateState(LocateState.SUCCESS, location.replaceAll("市", ""));
+
+
 ```
+  //定位
+        LocationManager.startSingleLocation(new IMapLocationListener() {
+            @Override
+            public void onLocationChanged(AMapLocation aMapLocation) {
 
-### Step3:
+                if (aMapLocation.getErrorCode() == 0) {
+                    String city = aMapLocation.getCity();
+                    String district = aMapLocation.getDistrict();
+                    String location = StringUtils.extractLocation(city, district);
 
-enjoy it.
+                    //定位成功，更新状态
+                    cityPickerFragment.updateLocateState(LocateState.SUCCESS, location.replaceAll("市", ""));
+                } else {
+                    cityPickerFragment.updateLocateState(LocateState.FAILED, null);
 
-# Proguard
+                }
 
-注意混淆
 
-```java
-//定位
--keep class com.amap.api.location.**{*;}
--keep class com.amap.api.fence.**{*;}
--keep class com.autonavi.aps.amapapi.model.**{*;}
+            }
+        });
 ```
-
-# Ad
-我的[动漫周边淘宝店]( https://shop238932691.taobao.com/) ，希望亲可以关注下(dan)：
-
-![二维码](https://img.alicdn.com/imgextra/i1/769720206/TB2AnBVar0kpuFjy0FjXXcBbVXa_!!769720206.png)
