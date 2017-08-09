@@ -6,7 +6,6 @@
     android:clickable="true"
     android:orientation="vertical"
     android:background="@color/cp_content_bg">
-
     <include layout="@layout/cp_view_search"/>
 
     <RelativeLayout
