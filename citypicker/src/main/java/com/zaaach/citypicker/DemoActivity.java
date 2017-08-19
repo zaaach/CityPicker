@@ -1,51 +1,14 @@
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.FrameLayout;
+
+import com.qiwei.citypickerlibrary.R;
+import com.qiwei.citypickerlibrary.citypicker.model.LocateState;
+import com.qiwei.citypickerlibrary.citypicker.utils.StringUtils;
 
 
-# CityPicker
-
-[![Platform](https://img.shields.io/badge/platform-android-green.svg)](http://developer.android.com/index.html)
-[![API](https://img.shields.io/badge/API-9%2B-yellow.svg?style=flat)](https://android-arsenal.com/api?level=9)
-
-现在使用比较多的类似美团等APP的城市选择界面.
-
-2步即可实现，就是这么简单粗暴！
-
-# Gif
-
-![image](https://github.com/zaaach/CityPicker/raw/master/art/screen.gif)
-
-# APK
-
-下载[demo.apk](https://github.com/zaaach/CityPicker/raw/master/art/demo.apk)体验.
-
-# Install
-
-目前没上传，只能
-下载library手动导入.
-
-# Usage
-
-### step1:
-
-创建Activity引入**CityPickerFragment**;
-
-```
- cityPickerFragment = new CityPickerFragment();
- getSupportFragmentManager().beginTransaction()
-          .add(R.id.fl_activity_city_picker_container, cityPickerFragment).commit();
-  
-```
-
-### Step2
-
-定位更新当前位置状态
-
-```
-cityPickerFragment.updateLocateState(LocateState.SUCCESS, location.replaceAll("市", ""));
-```
-
-# 例子
-
-```
 /**
  * 引用例子
  */
@@ -66,11 +29,10 @@ public class DemoActivity extends AppCompatActivity {
 
 
     protected void initView() {
-    
-    //这里
-        cityPickerFragment = new CityPickerFragment();
+        cityPickerFragment = new CityPickerFragment();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fl_activity_city_picker_container, cityPickerFragment).commit();
+
 
 
         //定位
@@ -103,6 +65,3 @@ public class DemoActivity extends AppCompatActivity {
         LocationManager.stopSingleLocation();
     }
 }
-
-
-```

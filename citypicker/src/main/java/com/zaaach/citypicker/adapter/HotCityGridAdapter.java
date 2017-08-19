@@ -16,11 +16,14 @@ import java.util.List;
  * author zaaach on 2016/1/26.
  */
 public class HotCityGridAdapter extends BaseAdapter {
-    private Context mContext;
+   // private Context mContext;
+    private WeakReference<Context> mContext;
     private List<String> mCities;
 
     public HotCityGridAdapter(Context context) {
-        this.mContext = context;
+//         this.mContext = context;
+         //弱引用解决内存泄漏问题
+        mContext = new WeakReference<>(context);
         mCities = new ArrayList<>();
         mCities.add("北京");
         mCities.add("上海");
@@ -52,7 +55,7 @@ public class HotCityGridAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup parent) {
         HotCityViewHolder holder;
         if (view == null){
-            view = LayoutInflater.from(mContext).inflate(R.layout.cp_item_hot_city_gridview, parent, false);
+            view = LayoutInflater.from(mContext.get()).inflate(R.layout.cp_item_hot_city_gridview, parent, false);
             holder = new HotCityViewHolder();
             holder.name = (TextView) view.findViewById(R.id.tv_hot_city_name);
             view.setTag(holder);

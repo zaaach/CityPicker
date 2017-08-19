@@ -25,7 +25,8 @@ import java.util.List;
 public class CityListAdapter extends BaseAdapter {
     private static final int VIEW_TYPE_COUNT = 3;
 
-    private Context mContext;
+//     private Context mContext;
+    private WeakReference<Context> mContext;
     private LayoutInflater inflater;
     private List<City> mCities;
     private HashMap<String, Integer> letterIndexes;
@@ -35,7 +36,9 @@ public class CityListAdapter extends BaseAdapter {
     private String locatedCity;
 
     public CityListAdapter(Context mContext, List<City> mCities) {
-        this.mContext = mContext;
+          //弱引用解决内存泄漏问题
+        this.mContext = new WeakReference<>(mContext);
+//         this.mContext = mContext;
         this.mCities = mCities;
         this.inflater = LayoutInflater.from(mContext);
         if (mCities == null){
@@ -114,7 +117,7 @@ public class CityListAdapter extends BaseAdapter {
                 TextView state = (TextView) view.findViewById(R.id.tv_located_city);
                 switch (locateState){
                     case LocateState.LOCATING:
-                        state.setText(mContext.getString(R.string.cp_locating));
+                        state.setText(mContext.get().getString(R.string.cp_locating));
                         break;
                     case LocateState.FAILED:
                         state.setText(R.string.cp_located_failed);
@@ -143,7 +146,7 @@ public class CityListAdapter extends BaseAdapter {
             case 1:     //热门
                 view = inflater.inflate(R.layout.cp_view_hot_city, parent, false);
                 WrapHeightGridView gridView = (WrapHeightGridView) view.findViewById(R.id.gridview_hot_city);
-                final HotCityGridAdapter hotCityGridAdapter = new HotCityGridAdapter(mContext);
+                final HotCityGridAdapter hotCityGridAdapter = new HotCityGridAdapter(mContext.get());
                 gridView.setAdapter(hotCityGridAdapter);
                 gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
