@@ -15,6 +15,7 @@ import com.zaaach.citypicker.model.LocateState;
 import com.zaaach.citypicker.utils.PinyinUtils;
 import com.zaaach.citypicker.view.WrapHeightGridView;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

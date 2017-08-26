@@ -11,13 +11,12 @@
         <activity android:name=".MainActivity" android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name="com.zaaach.citypicker.CityPickerActivity"
+            android:name=".CityPickerActivity"
             android:theme="@style/CityPicker.NoActionBar"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"/>

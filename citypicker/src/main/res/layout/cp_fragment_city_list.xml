@@ -34,7 +34,7 @@
             android:textColor="@android:color/white"
             android:visibility="gone"/>
 
-        <com.qiwei.citypickerlibrary.citypicker.view.SideLetterBar
+        <com.zaaach.citypicker.view.SideLetterBar
             android:id="@+id/side_letter_bar"
             android:layout_width="@dimen/side_letter_bar_width"
             android:layout_height="match_parent"

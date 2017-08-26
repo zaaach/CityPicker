@@ -18,6 +18,10 @@ public class SideLetterBar extends View {
     private boolean showBg = false;
     private OnLetterChangedListener onLetterChangedListener;
     private TextView overlay;
+    //SideLetterBar的高度
+//    private int mHight;
+    //判断是否第一次绘制
+    private boolean isFirst = true;
 
     public SideLetterBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -33,9 +37,10 @@ public class SideLetterBar extends View {
 
     /**
      * 设置悬浮的textview
+     *
      * @param overlay
      */
-    public void setOverlay(TextView overlay){
+    public void setOverlay(TextView overlay) {
         this.overlay = overlay;
     }
 
@@ -48,6 +53,10 @@ public class SideLetterBar extends View {
         }
 
         int height = getHeight();
+//        if (isFirst) { //只设置一次，SideLetterBar不会随着软键盘出现而改变布局高度
+//            mHight = getHeight();
+//            isFirst = false;
+//        }
         int width = getWidth();
         int singleHeight = height / b.length;
         for (int i = 0; i < b.length; i++) {
@@ -82,7 +91,7 @@ public class SideLetterBar extends View {
                         listener.onLetterChanged(b[c]);
                         choose = c;
                         invalidate();
-                        if (overlay != null){
+                        if (overlay != null) {
                             overlay.setVisibility(VISIBLE);
                             overlay.setText(b[c]);
                         }
@@ -96,7 +105,7 @@ public class SideLetterBar extends View {
                         listener.onLetterChanged(b[c]);
                         choose = c;
                         invalidate();
-                        if (overlay != null){
+                        if (overlay != null) {
                             overlay.setVisibility(VISIBLE);
                             overlay.setText(b[c]);
                         }
@@ -107,7 +116,7 @@ public class SideLetterBar extends View {
                 showBg = false;
                 choose = -1;
                 invalidate();
-                if (overlay != null){
+                if (overlay != null) {
                     overlay.setVisibility(GONE);
                 }
                 break;

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.zaaach.citypicker.R;
 import com.zaaach.citypicker.model.City;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 /**

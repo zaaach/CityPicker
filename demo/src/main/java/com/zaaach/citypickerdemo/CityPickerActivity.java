@@ -1,67 +1,22 @@
+package com.zaaach.citypickerdemo;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.FrameLayout;
+import android.widget.Toast;
 
-# CityPicker
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationListener;
+import com.zaaach.citypicker.CityPickerFragment;
+import com.zaaach.citypicker.model.LocateState;
+import com.zaaach.citypicker.utils.StringUtils;
 
-[![Platform](https://img.shields.io/badge/platform-android-green.svg)](http://developer.android.com/index.html)
-[![API](https://img.shields.io/badge/API-9%2B-yellow.svg?style=flat)](https://android-arsenal.com/api?level=9)
-
-现在使用比较多的类似美团等APP的城市选择界面.
-
-2步即可实现，就是这么简单粗暴！
-
-# Gif
-
-![image](https://github.com/zaaach/CityPicker/raw/master/art/screen.gif)
-
-# APK
-
-下载[demo.apk](https://github.com/zaaach/CityPicker/raw/master/art/demo.apk)体验.
-
-# Install
-
-目前没上传，只能
-下载library(citypicker)手动导入.
-
-# Usage
-
-### step1:
-
-创建Activity引入**CityPickerFragment**;
-
-```
- cityPickerFragment = new CityPickerFragment();
- getSupportFragmentManager().beginTransaction()
-          .add(R.id.fl_activity_city_picker_container, cityPickerFragment).commit();
-  
-```
-
-### Step2
-
-定位更新当前位置状态
-
-```
-cityPickerFragment.updateLocateState(LocateState.SUCCESS, location.replaceAll("市", ""));
-```
-
-### Step3
-添加到清单文件中，修改软键盘模式。添加高德地图的key
-``` 
- <activity
-            android:name=".CityPickerActivity"
-            android:theme="@style/CityPicker.NoActionBar"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"/>
-		
-<meta-data android:name="com.amap.api.v2.apikey" android:value="your key"/>
-```
-
-
-# 例子
-
-```
 /**
- * 引用例子
+ * Created by rhm on 2017/8/26.
  */
+
 public class CityPickerActivity extends AppCompatActivity {
 
     private FrameLayout flCityPickerContainer;
@@ -118,4 +73,3 @@ public class CityPickerActivity extends AppCompatActivity {
     }
 }
 
-```

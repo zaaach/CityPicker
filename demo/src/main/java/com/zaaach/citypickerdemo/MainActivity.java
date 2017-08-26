@@ -6,7 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.zaaach.citypicker.CityPickerActivity;
+import com.zaaach.citypicker.CityPickerFragment;
+
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_PICK_CITY = 233;
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_PICK_CITY && resultCode == RESULT_OK){
             if (data != null){
-                String city = data.getStringExtra(CityPickerActivity.KEY_PICKED_CITY);
+                String city = data.getStringExtra(CityPickerFragment.KEY_PICKED_CITY);
                 resultTV.setText("当前选择：" + city);
             }
         }

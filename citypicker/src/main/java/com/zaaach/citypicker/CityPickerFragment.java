@@ -1,4 +1,4 @@
-package com.qiwei.citypickerlibrary.citypicker;
+package com.zaaach.citypicker;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,13 +16,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.qiwei.citypickerlibrary.R;
-import com.qiwei.citypickerlibrary.citypicker.adapter.CityListAdapter;
-import com.qiwei.citypickerlibrary.citypicker.adapter.ResultListAdapter;
-import com.qiwei.citypickerlibrary.citypicker.db.DBManager;
-import com.qiwei.citypickerlibrary.citypicker.model.City;
-import com.qiwei.citypickerlibrary.citypicker.model.LocateState;
-import com.qiwei.citypickerlibrary.citypicker.view.SideLetterBar;
+
+import com.zaaach.citypicker.adapter.CityListAdapter;
+import com.zaaach.citypicker.adapter.ResultListAdapter;
+import com.zaaach.citypicker.db.DBManager;
+import com.zaaach.citypicker.model.City;
+import com.zaaach.citypicker.model.LocateState;
+import com.zaaach.citypicker.view.SideLetterBar;
 
 import java.util.List;
 
