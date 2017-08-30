@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:ignore="RtlHardcoded">
+
+    <TextView
+        style="@style/LetterIndexTextViewStyle"
+        android:text="@string/cp_hot_city"/>
+
+    <com.zaaach.citypicker.view.WrapHeightGridView
+        android:id="@+id/gridview_hot_city"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="@dimen/side_letter_bar_width"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:numColumns="3"
+        android:horizontalSpacing="12dp"
+        android:verticalSpacing="12dp"
+        android:listSelector="@android:color/transparent"
+        android:cacheColorHint="@android:color/transparent"
+        android:scrollbars="none"/>
+</LinearLayout>
