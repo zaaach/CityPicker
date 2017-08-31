@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.3"
 
     defaultConfig {
         minSdkVersion 14
@@ -28,7 +28,7 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:24.2.1'
     testCompile 'junit:junit:4.12'
-    compile files('libs/AMap_Location_V3.2.0_20161205.jar')
+    compile files('libs/AMap_Location_V3.5.0_20170731.jar')
 }
 
 apply plugin: 'com.github.dcendents.android-maven'

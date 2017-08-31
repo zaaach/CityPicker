@@ -1,7 +1,10 @@
 package com.zaaach.citypicker;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -13,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -31,7 +35,7 @@ import java.util.List;
 /**
  * Author Bro0cL on 2016/12/16.
  */
-public class CityPickerActivity extends AppCompatActivity implements View.OnClickListener {
+public class CityPickerActivity extends CheckPermissionsActivity implements View.OnClickListener, CheckPermissionsListener {
     public static final String KEY_PICKED_CITY = "picked_city";
 
     private ListView mListView;
@@ -51,13 +55,19 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
     private AMapLocationClient mLocationClient;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cp_activity_city_list);
 
         initData();
         initView();
         initLocation();
+        //请求权限
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+            mLocationClient.startLocation();
+        }else {
+            requestPermissions(this, neededPermissions, this);
+        }
     }
 
     private void initLocation() {
@@ -82,7 +92,6 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
                 }
             }
         });
-        mLocationClient.startLocation();
     }
 
     private void initData() {
@@ -99,7 +108,7 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onLocateClick() {
                 mCityAdapter.updateLocateState(LocateState.LOCATING, null);
-                mLocationClient.startLocation();
+                requestPermissions(CityPickerActivity.this, neededPermissions, CityPickerActivity.this);
             }
         });
 
@@ -189,8 +198,13 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mLocationClient.stopLocation();
+    public void onGranted() {
+        mLocationClient.startLocation();
+    }
+
+    @Override
+    public void onDenied(List<String> permissions) {
+        Toast.makeText(this, "权限被禁用，请到设置里打开", Toast.LENGTH_SHORT).show();
+        mCityAdapter.updateLocateState(LocateState.FAILED, null);
     }
 }

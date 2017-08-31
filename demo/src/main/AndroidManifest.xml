@@ -22,7 +22,10 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"/>
 
-        <meta-data android:name="com.amap.api.v2.apikey" android:value="your key"/>
+        <!--这里的value要替换成你项目的-->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="138e5cf1e8961ae326ff0908c03d1ae1"/>
     </application>
 
 </manifest>
