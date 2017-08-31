@@ -96,7 +96,7 @@ enjoy it.
 
 ###### v1.2
 
--   `CityPicker` 已处理6.0运行时权限，具体查看[CheckPermissionsActivity](https://github.com/zaaach/CityPicker/blob/city-picker/citypicker/src/main/java/com/zaaach/citypicker/CheckPermissionsActivity)
+-   `CityPicker` 已处理6.0运行时权限，具体查看[CheckPermissionsActivity](https://github.com/zaaach/CityPicker/blob/city-picker/citypicker/src/main/java/com/zaaach/citypicker/CheckPermissionsActivity.java)
 
 -   标题栏移除
 -   高德定位sdk更新
