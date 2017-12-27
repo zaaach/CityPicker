@@ -101,6 +101,6 @@ enjoy it.
 -   标题栏移除
 -   高德定位sdk更新
 -   demo可正常定位
-# **领红包**
+# 领红包
 领完红包再继续敲代码(#^.^#)
-![image](https://github.com/zaaach/CityPicker/raw/master/art/1514356638768.jpg)
+![image](https://github.com/zaaach/CityPicker/blob/city-picker/art/1514356638768.jpg)
