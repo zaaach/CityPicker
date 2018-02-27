@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="cp_colorAccent">#F3F3F3</color>
-    <color name="cp_colorPrimary">@color/cp_colorAccent</color>
-    <color name="cp_colorPrimaryDark">@color/cp_colorAccent</color>
+    <color name="cp_colorPrimary">#3F51B5</color>
+    <color name="cp_colorPrimaryDark">#303F9F</color>
+    <color name="cp_colorAccent">#3F51B5</color>
 
-    <color name="cp_divider">#E5E5E5</color>
-    <color name="cp_shadow">#AAEBEBEB</color>
-    <color name="cp_common_bg">#FAFAFA</color>
-    <color name="cp_content_bg">@color/cp_colorAccent</color>
-    <color name="cp_gray">#8c8c8c</color>
-    <color name="cp_gray_deep">#5c5c5c</color>
-    <color name="cp_alpha_gray">#CC646464</color>
-    <color name="cp_theme_gray">#646464</color>
+    <color name="cp_color_gray_light">#cdcdcd</color>
+    <color name="cp_color_gray">#999999</color>
+    <color name="cp_color_gray_deep">#666666</color>
+    <color name="cp_color_gray_dark">#333333</color>
+    <color name="cp_color_section_bg">#EDEDED</color>
+    <color name="cp_color_grid_item_bg">#f5f5f5</color>
 </resources>

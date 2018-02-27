@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cp_list_item_name"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/cpListItemHeight"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center_vertical"
+    android:paddingLeft="16dp"
+    android:paddingStart="16dp"
+    android:textColor="?attr/cpListItemTextColor"
+    android:textSize="?attr/cpListItemTextSize"
+    tools:ignore="RtlSymmetry" />

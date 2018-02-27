@@ -17,16 +17,20 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.zaaach.citypicker.db.DBConfig.COLUMN_C_CODE;
+import static com.zaaach.citypicker.db.DBConfig.COLUMN_C_NAME;
+import static com.zaaach.citypicker.db.DBConfig.COLUMN_C_PINYIN;
+import static com.zaaach.citypicker.db.DBConfig.COLUMN_C_PROVINCE;
+import static com.zaaach.citypicker.db.DBConfig.LATEST_DB_NAME;
+import static com.zaaach.citypicker.db.DBConfig.DB_NAME_V1;
+import static com.zaaach.citypicker.db.DBConfig.TABLE_NAME;
+
 /**
- * author Bro0cL on 2016/1/26.
+ * Author Bro0cL on 2016/1/26.
  */
 public class DBManager {
-    private static final String ASSETS_NAME = "china_cities.db";
-    private static final String DB_NAME = "china_cities.db";
-    private static final String TABLE_NAME = "city";
-    private static final String NAME = "name";
-    private static final String PINYIN = "pinyin";
     private static final int BUFFER_SIZE = 1024;
+
     private String DB_PATH;
     private Context mContext;
 
@@ -35,20 +39,26 @@ public class DBManager {
         DB_PATH = File.separator + "data"
                 + Environment.getDataDirectory().getAbsolutePath() + File.separator
                 + context.getPackageName() + File.separator + "databases" + File.separator;
+        copyDBFile();
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void copyDBFile(){
+    private void copyDBFile(){
         File dir = new File(DB_PATH);
         if (!dir.exists()){
             dir.mkdirs();
         }
-        File dbFile = new File(DB_PATH + DB_NAME);
+        //如果旧版数据库存在，则删除
+        File dbV1 = new File(DB_PATH + DB_NAME_V1);
+        if (dbV1.exists()){
+            dbV1.delete();
+        }
+        //创建新版本数据库
+        File dbFile = new File(DB_PATH + LATEST_DB_NAME);
         if (!dbFile.exists()){
             InputStream is;
             OutputStream os;
             try {
-                is = mContext.getResources().getAssets().open(ASSETS_NAME);
+                is = mContext.getResources().getAssets().open(LATEST_DB_NAME);
                 os = new FileOutputStream(dbFile);
                 byte[] buffer = new byte[BUFFER_SIZE];
                 int length;
@@ -65,14 +75,16 @@ public class DBManager {
     }
 
     public List<City> getAllCities(){
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + LATEST_DB_NAME, null);
         Cursor cursor = db.rawQuery("select * from " + TABLE_NAME, null);
         List<City> result = new ArrayList<>();
         City city;
         while (cursor.moveToNext()){
-            String name = cursor.getString(cursor.getColumnIndex(NAME));
-            String pinyin = cursor.getString(cursor.getColumnIndex(PINYIN));
-            city = new City(name, pinyin);
+            String name = cursor.getString(cursor.getColumnIndex(COLUMN_C_NAME));
+            String province = cursor.getString(cursor.getColumnIndex(COLUMN_C_PROVINCE));
+            String pinyin = cursor.getString(cursor.getColumnIndex(COLUMN_C_PINYIN));
+            String code = cursor.getString(cursor.getColumnIndex(COLUMN_C_CODE));
+            city = new City(name, province, pinyin, code);
             result.add(city);
         }
         cursor.close();
@@ -82,20 +94,25 @@ public class DBManager {
     }
 
     public List<City> searchCity(final String keyword){
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
-        Cursor cursor = db.rawQuery("select * from " + TABLE_NAME +" where name like \"%" + keyword
-                + "%\" or pinyin like \"%" + keyword + "%\"", null);
+        String sql = "select * from " + TABLE_NAME + " where "
+                + COLUMN_C_NAME + " like ? " + "or "
+                + COLUMN_C_PINYIN + " like ? ";
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + LATEST_DB_NAME, null);
+        Cursor cursor = db.rawQuery(sql, new String[]{"%"+keyword+"%", keyword+"%"});
+
         List<City> result = new ArrayList<>();
-        City city;
         while (cursor.moveToNext()){
-            String name = cursor.getString(cursor.getColumnIndex(NAME));
-            String pinyin = cursor.getString(cursor.getColumnIndex(PINYIN));
-            city = new City(name, pinyin);
+            String name = cursor.getString(cursor.getColumnIndex(COLUMN_C_NAME));
+            String province = cursor.getString(cursor.getColumnIndex(COLUMN_C_PROVINCE));
+            String pinyin = cursor.getString(cursor.getColumnIndex(COLUMN_C_PINYIN));
+            String code = cursor.getString(cursor.getColumnIndex(COLUMN_C_CODE));
+            City city = new City(name, province, pinyin, code);
             result.add(city);
         }
         cursor.close();
         db.close();
-        Collections.sort(result, new CityComparator());
+        CityComparator comparator = new CityComparator();
+        Collections.sort(result, comparator);
         return result;
     }
 

@@ -1,1 +1,1 @@
-include ':demo', ':citypicker'
+include ':sample', ':citypicker'

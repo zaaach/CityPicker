@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:padding="16dp">
+
+    <FrameLayout
+        android:id="@+id/cp_list_item_current_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="?attr/cpListItemHeight"
+        android:foreground="?attr/selectableItemBackground"
+        tools:ignore="UselessParent">
+        <TextView
+            android:id="@+id/cp_list_item_current"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/cp_grid_item_padding"
+            android:paddingBottom="@dimen/cp_grid_item_padding"
+            android:gravity="center"
+            android:background="?attr/cpGridItemBackground"
+            android:textSize="?attr/cpListItemTextSize"
+            android:textColor="?attr/cpListItemTextColor"/>
+    </FrameLayout>
+</LinearLayout>
