@@ -71,8 +71,8 @@ new CityPickerBuilder()
         .setOnPickListener(new OnPickListener() {
               @Override
               public void onPick(int position, String data) {
-                     Toast.makeText(getApplicationContext(), data, Toast.LENGTH_SHORT).show();
-              })
+                      Toast.makeText(getApplicationContext(), data, Toast.LENGTH_SHORT).show();
+              }})
          .show();
 ```
 
