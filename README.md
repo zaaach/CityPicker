@@ -78,31 +78,31 @@ hotCities.add(new HotCity("杭州", "浙江", "101210101"));
 ......
 
 CityPicker.getInstance()
-	.setFragmentManager(getSupportFragmentManager())	//此方法必须调用
-    .enableAnimation(enable)	//启用动画效果
-    .setAnimationStyle(anim)	//自定义动画
-    .setLocatedCity(new LocatedCity("杭州", "浙江", "101210101")))  //APP自身已定位的城市，默认为null（定位失败）
-    .setHotCities(hotCities)	//指定热门城市
-    .setOnPickListener(new OnPickListener() {
-    	@Override
-		public void onPick(int position, City data) {
-			Toast.makeText(getApplicationContext(), data.getName(), Toast.LENGTH_SHORT).show();
-		}
+		.setFragmentManager(getSupportFragmentManager())	//此方法必须调用
+    	.enableAnimation(enable)	//启用动画效果
+    	.setAnimationStyle(anim)	//自定义动画
+    	.setLocatedCity(new LocatedCity("杭州", "浙江", "101210101")))  //APP自身已定位的城市，默认为null（定位失败）
+    	.setHotCities(hotCities)	//指定热门城市
+    	.setOnPickListener(new OnPickListener() {
+    		@Override
+			public void onPick(int position, City data) {
+				Toast.makeText(getApplicationContext(), data.getName(), Toast.LENGTH_SHORT).show();
+			}
       
-    	@Override
-		public void onLocate() {
-			//开始定位，这里模拟一下定位
-        	new Handler().postDelayed(new Runnable() {
-				@Override
-        		public void run() {
-                  	//定位完成之后更新数据
-					CityPicker.getInstance()
-                              .locateComplete(new LocatedCity("深圳", "广东", "101280601"), LocateState.SUCCESS);
-                }
-        	}, 2000);
-       }
-	})
-	.show();
+    		@Override
+			public void onLocate() {
+				//开始定位，这里模拟一下定位
+        		new Handler().postDelayed(new Runnable() {
+					@Override
+        			public void run() {
+                  		//定位完成之后更新数据
+						CityPicker.getInstance()
+                              	.locateComplete(new LocatedCity("深圳", "广东", "101280601"), LocateState.SUCCESS);
+                	}
+        		}, 2000);
+       		}
+		})
+		.show();
 ```
 
 ### 关于自定义主题：
