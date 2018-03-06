@@ -14,16 +14,6 @@ public class City {
     private String pinyin;
     private String code;
 
-    /**
-     * 定位和热门数据
-     * @param name
-     * @param section 悬浮栏文本
-     */
-    public City(String name, String section){
-        this.name = name;
-        this.pinyin = section;
-    }
-
     public City(String name, String province, String pinyin, String code) {
         this.name = name;
         this.province = province;

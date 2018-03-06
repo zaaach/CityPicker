@@ -8,7 +8,7 @@
     <TextView
         android:id="@+id/tv_current"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="72dp"
         android:gravity="center"
         android:text="当前城市：杭州"
         android:textSize="18sp"/>
@@ -17,21 +17,24 @@
         android:id="@+id/cb_hot"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginTop="8dp"
         android:text="指定热门城市"
+        android:textSize="16sp"/>
+    <CheckBox
+        android:id="@+id/cb_enable_anim"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="启用动画效果"
         android:textSize="16sp"/>
     <CheckBox
         android:id="@+id/cb_anim"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginTop="8dp"
         android:text="自定义动画"
         android:textSize="16sp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="点击更换："/>
     <Button
         android:id="@+id/btn_style"
@@ -50,6 +53,6 @@
         android:layout_marginTop="24dp"
         android:background="@color/colorPrimary"
         android:text="选择城市"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textColor="@android:color/white"/>
 </LinearLayout>

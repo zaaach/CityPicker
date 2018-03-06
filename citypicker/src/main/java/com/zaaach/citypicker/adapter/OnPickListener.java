@@ -1,9 +1,8 @@
 package com.zaaach.citypicker.adapter;
 
-/**
- * @Author: Bro0cL
- * @Date: 2018/2/8 21:41
- */
+import com.zaaach.citypicker.model.City;
+
 public interface OnPickListener {
-    void onPick(int position, String data);
+    void onPick(int position, City data);
+    void onLocate();
 }

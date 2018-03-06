@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.zaaach.citypicker.R;
 import com.zaaach.citypicker.model.City;
+import com.zaaach.citypicker.model.HotCity;
 
 import java.util.List;
 
@@ -23,10 +24,10 @@ public class GridListAdapter extends RecyclerView.Adapter<GridListAdapter.GridVi
     public static final int SPAN_COUNT = 3;
 
     private Context mContext;
-    private List<City> mData;
-    private InnerDismissListener mDismissListener;
+    private List<HotCity> mData;
+    private InnerListener mInnerListener;
 
-    public GridListAdapter(Context context, List<City> data) {
+    public GridListAdapter(Context context, List<HotCity> data) {
         this.mContext = context;
         this.mData = data;
     }
@@ -40,8 +41,8 @@ public class GridListAdapter extends RecyclerView.Adapter<GridListAdapter.GridVi
     @Override
     public void onBindViewHolder(GridViewHolder holder, int position) {
         final int pos = holder.getAdapterPosition();
-        final City city = mData.get(pos);
-        if (city == null) return;
+        final City data = mData.get(pos);
+        if (data == null) return;
         //设置item宽高
         DisplayMetrics dm = mContext.getResources().getDisplayMetrics();
         int screenWidth = dm.widthPixels;
@@ -56,12 +57,12 @@ public class GridListAdapter extends RecyclerView.Adapter<GridListAdapter.GridVi
         lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         holder.container.setLayoutParams(lp);
 
-        holder.name.setText(city.getName());
+        holder.name.setText(data.getName());
         holder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mDismissListener != null){
-                    mDismissListener.dismiss(pos, city.getName());
+                if (mInnerListener != null){
+                    mInnerListener.dismiss(pos, data);
                 }
             }
         });
@@ -83,7 +84,7 @@ public class GridListAdapter extends RecyclerView.Adapter<GridListAdapter.GridVi
         }
     }
 
-    public void setInnerDismissListener(InnerDismissListener listener){
-        this.mDismissListener = listener;
+    public void setInnerListener(InnerListener listener){
+        this.mInnerListener = listener;
     }
 }

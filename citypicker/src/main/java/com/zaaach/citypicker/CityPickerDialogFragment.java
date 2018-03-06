@@ -1,5 +1,6 @@
 package com.zaaach.citypicker;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,16 +21,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zaaach.citypicker.adapter.CityListAdapter;
-import com.zaaach.citypicker.adapter.InnerDismissListener;
+import com.zaaach.citypicker.adapter.InnerListener;
 import com.zaaach.citypicker.adapter.OnPickListener;
 import com.zaaach.citypicker.adapter.decoration.DividerItemDecoration;
 import com.zaaach.citypicker.adapter.decoration.SectionItemDecoration;
 import com.zaaach.citypicker.db.DBManager;
 import com.zaaach.citypicker.model.City;
+import com.zaaach.citypicker.model.LocateState;
+import com.zaaach.citypicker.model.LocatedCity;
+import com.zaaach.citypicker.model.HotCity;
 import com.zaaach.citypicker.view.SideIndexBar;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -37,7 +40,7 @@ import java.util.List;
  * @Date: 2018/2/6 20:50
  */
 public class CityPickerDialogFragment extends AppCompatDialogFragment implements TextWatcher,
-        View.OnClickListener, SideIndexBar.OnIndexTouchedChangedListener, InnerDismissListener {
+        View.OnClickListener, SideIndexBar.OnIndexTouchedChangedListener, InnerListener {
     private View mContentView;
     private RecyclerView mRecyclerView;
     private View mEmptyView;
@@ -50,31 +53,26 @@ public class CityPickerDialogFragment extends AppCompatDialogFragment implements
     private LinearLayoutManager mLayoutManager;
     private CityListAdapter mAdapter;
     private List<City> mAllCities;
-    private List<City> mHotCities;
+    private List<HotCity> mHotCities;
     private List<City> mResults;
 
     private DBManager dbManager;
 
-    private int mAnimStyle;
-    private String mCurrentCity;
-    private List<String> mHots;
+    private boolean enableAnim = false;
+    private int mAnimStyle = R.style.DefaultCityPickerAnimation;
+    private LocatedCity mLocatedCity;
+    private int locateState;
     private OnPickListener mOnPickListener;
-
-    private static final String[] DEFAULT_HOT_CITIES = {"北京", "上海", "广州", "深圳", "杭州", "南京", "武汉", "福州", "厦门"};
 
     /**
      * 获取实例
-     * @param animStyle 动画效果
-     * @param current 当前定位城市
-     * @param list 热门城市
+     * @param enable 是否启用动画效果
      * @return
      */
-    public static CityPickerDialogFragment newInstance(@StyleRes int animStyle, String current, ArrayList<String> list){
+    public static CityPickerDialogFragment newInstance(boolean enable){
         final CityPickerDialogFragment fragment = new CityPickerDialogFragment();
         Bundle args = new Bundle();
-        args.putInt("cp_anim_style", animStyle);
-        args.putString("cp_current", current);
-        args.putStringArrayList("cp_hots", list);
+        args.putBoolean("cp_enable_anim", enable);
         fragment.setArguments(args);
         return fragment;
     }
@@ -86,33 +84,55 @@ public class CityPickerDialogFragment extends AppCompatDialogFragment implements
 
         Bundle args = getArguments();
         if (args != null) {
-            mAnimStyle = args.getInt("cp_anim_style");
-            mCurrentCity = args.getString("cp_current");
-            mHots = args.getStringArrayList("cp_hots");
+            enableAnim = args.getBoolean("cp_enable_anim");
         }
-        if (mAnimStyle <= 0)
-            mAnimStyle = R.style.DefaultCityPickerAnimation;
-        if (TextUtils.isEmpty(mCurrentCity))
-            mCurrentCity = getString(R.string.cp_locate_failed);
-        if (mHots == null || mHots.isEmpty())
-            mHots = Arrays.asList(DEFAULT_HOT_CITIES);
-        initHotCities(mHots);
+
+        initHotCities();
+        initLocatedCity();
 
         dbManager = new DBManager(getContext());
         mAllCities = dbManager.getAllCities();
-        mAllCities.add(0, new City(mCurrentCity, "定位城市"));
-        mAllCities.add(1, new City(mHots.get(0), "热门城市"));
+        mAllCities.add(0, mLocatedCity);
+        mAllCities.add(1, new HotCity("热门城市", "未知", "0"));
         mResults = mAllCities;
     }
 
-    private void initHotCities(List<String> list) {
-        List<City> hots = new ArrayList<>();
-        for (String name : list) {
-            City city = new City(name, "热门城市");
-            hots.add(city);
+    private void initLocatedCity() {
+        if (mLocatedCity == null){
+            mLocatedCity = new LocatedCity("定位失败", "未知", "0");
+            locateState = LocateState.FAILURE;
+        }else{
+            locateState = LocateState.SUCCESS;
         }
-        mHotCities = new ArrayList<>();
-        mHotCities.addAll(hots);
+    }
+
+    private void initHotCities() {
+        if (mHotCities == null || mHotCities.isEmpty()) {
+            mHotCities = new ArrayList<>();
+            mHotCities.add(new HotCity("北京", "北京", "101010100"));
+            mHotCities.add(new HotCity("上海", "上海", "101020100"));
+            mHotCities.add(new HotCity("广州", "广东", "101280101"));
+            mHotCities.add(new HotCity("深圳", "广东", "101280601"));
+            mHotCities.add(new HotCity("天津", "天津", "101030100"));
+            mHotCities.add(new HotCity("杭州", "浙江", "101210101"));
+            mHotCities.add(new HotCity("南京", "江苏", "101190101"));
+            mHotCities.add(new HotCity("成都", "四川", "101270101"));
+            mHotCities.add(new HotCity("武汉", "湖北", "101200101"));
+        }
+    }
+
+    public void setLocatedCity(LocatedCity location){
+        mLocatedCity = location;
+    }
+
+    public void setHotCities(List<HotCity> data){
+        if (data != null && !data.isEmpty()){
+            this.mHotCities = data;
+        }
+    }
+
+    public void setAnimationStyle(@StyleRes int style){
+        this.mAnimStyle = style <= 0 ? R.style.DefaultCityPickerAnimation : style;
     }
 
     @Nullable
@@ -126,8 +146,8 @@ public class CityPickerDialogFragment extends AppCompatDialogFragment implements
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new SectionItemDecoration(getActivity(), mAllCities), 0);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity()), 1);
-        mAdapter = new CityListAdapter(getActivity(), mAllCities, mHotCities);
-        mAdapter.setInnerDismissListener(this);
+        mAdapter = new CityListAdapter(getActivity(), mAllCities, mHotCities, locateState);
+        mAdapter.setInnerListener(this);
         mRecyclerView.setAdapter(mAdapter);
 
         mEmptyView = mContentView.findViewById(R.id.cp_empty_view);
@@ -145,15 +165,23 @@ public class CityPickerDialogFragment extends AppCompatDialogFragment implements
         mCancelBtn.setOnClickListener(this);
         mClearAllBtn.setOnClickListener(this);
 
-        Window window = getDialog().getWindow();
+        return mContentView;
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        Window window = dialog.getWindow();
         if(window != null) {
             window.getDecorView().setPadding(0, 0, 0, 0);
             window.setBackgroundDrawableResource(android.R.color.transparent);
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-            window.setWindowAnimations(mAnimStyle);
+            if (enableAnim) {
+                window.setWindowAnimations(mAnimStyle);
+            }
         }
-
-        return mContentView;
+        return dialog;
     }
 
     /** 搜索框监听 */
@@ -191,7 +219,7 @@ public class CityPickerDialogFragment extends AppCompatDialogFragment implements
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.cp_cancel) {
-            dismiss();
+            dismiss(-1, null);
         }else if(id == R.id.cp_clear_all){
             mSearchBox.setText("");
         }
@@ -213,11 +241,22 @@ public class CityPickerDialogFragment extends AppCompatDialogFragment implements
         }
     }
 
+    public void locationChanged(LocatedCity location, int state){
+        mAdapter.updateLocateState(location, state);
+    }
+
     @Override
-    public void dismiss(int position, String data) {
+    public void dismiss(int position, City data) {
         dismiss();
         if (mOnPickListener != null){
             mOnPickListener.onPick(position, data);
+        }
+    }
+
+    @Override
+    public void locate(){
+        if (mOnPickListener != null){
+            mOnPickListener.onLocate();
         }
     }
 

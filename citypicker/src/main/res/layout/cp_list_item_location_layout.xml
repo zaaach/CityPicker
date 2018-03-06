@@ -7,13 +7,15 @@
     android:padding="16dp">
 
     <FrameLayout
-        android:id="@+id/cp_list_item_current_layout"
+        android:id="@+id/cp_list_item_location_layout"
         android:layout_width="wrap_content"
         android:layout_height="?attr/cpListItemHeight"
+        android:clickable="true"
+        android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         tools:ignore="UselessParent">
         <TextView
-            android:id="@+id/cp_list_item_current"
+            android:id="@+id/cp_list_item_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/cp_grid_item_padding"
