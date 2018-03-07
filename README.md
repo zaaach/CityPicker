@@ -190,4 +190,4 @@ OK，enjoy it~
 
 如果在捐赠留言中备注名称，将会被记录到列表中~ 捐赠时可以留下你的github项目地址或个人主页地址，链接将添加到列表中起到互相推广的作用。
 
-#### [捐赠列表]( https://github.com/zaaach/CityPicker/raw/master/art/donationlist.md)
+#### [捐赠列表]( https://github.com/zaaach/CityPicker/blob/master/art/donationlist.md)
