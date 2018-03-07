@@ -79,7 +79,7 @@ hotCities.add(new HotCity("杭州", "浙江", "101210101"));
 
 CityPicker.getInstance()
   .setFragmentManager(getSupportFragmentManager())	//此方法必须调用
-  .enableAnimation(enable)	//启用动画效果
+  .enableAnimation(true)	//启用动画效果
   .setAnimationStyle(anim)	//自定义动画
   .setLocatedCity(new LocatedCity("杭州", "浙江", "101210101")))  //APP自身已定位的城市，默认为null（定位失败）
   .setHotCities(hotCities)	//指定热门城市
@@ -179,3 +179,15 @@ OK，enjoy it~
 
 -   项目重构优化，结构更清晰
 -   使用RecyclerView
+
+# 赞赏
+
+如果你喜欢 **CityPicker** 的设计，觉得帮助到了你，可以点右上角 "Star" 支持一下，谢谢！(〃'▽'〃)
+
+你也还可以扫描下面的二维码，请作者喝一杯咖啡~
+
+![image](https://github.com/zaaach/CityPicker/raw/master/art/alipay.png) ![image](https://github.com/zaaach/CityPicker/raw/master/art/wxpay.png)
+
+如果在捐赠留言中备注名称，将会被记录到列表中~ 捐赠时可以留下你的github项目地址或个人主页地址，链接将添加到列表中起到互相推广的作用。
+
+#### [捐赠列表]( https://github.com/zaaach/CityPicker/raw/master/art/donationlist.md)
