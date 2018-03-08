@@ -35,12 +35,18 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.BaseVi
     private List<HotCity> mHotData;
     private int locateState;
     private InnerListener mInnerListener;
+    private LinearLayoutManager mLayoutManager;
+    private boolean needRefresh = true;
 
     public CityListAdapter(Context context, List<City> data, List<HotCity> hotData, int state) {
         this.mData = data;
         this.mContext = context;
         this.mHotData = hotData;
         this.locateState = state;
+    }
+
+    public void setLayoutManager(LinearLayoutManager manager){
+        this.mLayoutManager = manager;
     }
 
     public void updateData(List<City> data){
@@ -52,7 +58,40 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.BaseVi
         mData.remove(0);
         mData.add(0, location);
         locateState = state;
-        notifyItemChanged(0);
+        refreshLocationItem();
+    }
+
+    public void refreshLocationItem(){
+        //如果定位城市的item可见则进行刷新
+        if (mLayoutManager.findFirstVisibleItemPosition() == 0){
+            if (needRefresh){
+                needRefresh = false;
+                notifyItemChanged(0);
+            }
+        }else {
+            needRefresh = true;
+        }
+    }
+
+    /**
+     * 滚动RecyclerView到索引位置
+     * @param index
+     */
+    public void scrollToSection(String index){
+        if (mData == null || mData.isEmpty()) return;
+        if (TextUtils.isEmpty(index)) return;
+        int size = mData.size();
+        for (int i = 0; i < size; i++) {
+            if (TextUtils.equals(index.substring(0, 1), mData.get(i).getSection().substring(0, 1))){
+                if (mLayoutManager != null){
+                    mLayoutManager.scrollToPositionWithOffset(i, 0);
+                    if (TextUtils.equals(index.substring(0, 1), "定")) {
+                        refreshLocationItem();
+                    }
+                    return;
+                }
+            }
+        }
     }
 
     @Override

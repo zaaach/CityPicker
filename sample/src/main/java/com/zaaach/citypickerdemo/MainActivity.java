@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                                                 .locateComplete(new LocatedCity("深圳", "广东", "101280601"),
                                                         LocateState.SUCCESS);
                                     }
-                                }, 2000);
+                                }, 3000);
                             }
                         })
                         .show();

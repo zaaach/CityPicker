@@ -27,9 +27,9 @@ import com.zaaach.citypicker.adapter.decoration.DividerItemDecoration;
 import com.zaaach.citypicker.adapter.decoration.SectionItemDecoration;
 import com.zaaach.citypicker.db.DBManager;
 import com.zaaach.citypicker.model.City;
+import com.zaaach.citypicker.model.HotCity;
 import com.zaaach.citypicker.model.LocateState;
 import com.zaaach.citypicker.model.LocatedCity;
-import com.zaaach.citypicker.model.HotCity;
 import com.zaaach.citypicker.view.SideIndexBar;
 
 import java.util.ArrayList;
@@ -148,7 +148,17 @@ public class CityPickerDialogFragment extends AppCompatDialogFragment implements
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity()), 1);
         mAdapter = new CityListAdapter(getActivity(), mAllCities, mHotCities, locateState);
         mAdapter.setInnerListener(this);
+        mAdapter.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+        //修复定位城市不刷新的bug
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE){
+                    mAdapter.refreshLocationItem();
+                }
+            }
+        });
 
         mEmptyView = mContentView.findViewById(R.id.cp_empty_view);
         mOverlayTextView = mContentView.findViewById(R.id.cp_overlay);
@@ -228,17 +238,7 @@ public class CityPickerDialogFragment extends AppCompatDialogFragment implements
     @Override
     public void onIndexChanged(String index, int position) {
         //滚动RecyclerView到索引位置
-        if (mResults == null || mResults.isEmpty()) return;
-        if (TextUtils.isEmpty(index)) return;
-        int size = mResults.size();
-        for (int i = 0; i < size; i++) {
-            if (TextUtils.equals(index.substring(0, 1), mResults.get(i).getSection().substring(0, 1))){
-                if (mLayoutManager != null){
-                    mLayoutManager.scrollToPositionWithOffset(i, 0);
-                    return;
-                }
-            }
-        }
+        mAdapter.scrollToSection(index);
     }
 
     public void locationChanged(LocatedCity location, int state){
