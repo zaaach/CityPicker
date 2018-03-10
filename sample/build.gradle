@@ -7,8 +7,8 @@ android {
         applicationId "com.zaaach.citypickerdemo"
         minSdkVersion 14
         targetSdkVersion 27
-        versionCode 3
-        versionName "2.0.1"
+        versionCode 4
+        versionName "2.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

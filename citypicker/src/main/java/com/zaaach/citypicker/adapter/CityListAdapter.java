@@ -1,6 +1,7 @@
 package com.zaaach.citypicker.adapter;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,7 +37,7 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.BaseVi
     private int locateState;
     private InnerListener mInnerListener;
     private LinearLayoutManager mLayoutManager;
-    private boolean needRefresh = true;
+    private boolean stateChanged;
 
     public CityListAdapter(Context context, List<City> data, List<HotCity> hotData, int state) {
         this.mData = data;
@@ -57,19 +58,16 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.BaseVi
     public void updateLocateState(LocatedCity location, int state){
         mData.remove(0);
         mData.add(0, location);
+        stateChanged = !(locateState == state);
         locateState = state;
         refreshLocationItem();
     }
 
     public void refreshLocationItem(){
         //如果定位城市的item可见则进行刷新
-        if (mLayoutManager.findFirstVisibleItemPosition() == 0){
-            if (needRefresh){
-                needRefresh = false;
-                notifyItemChanged(0);
-            }
-        }else {
-            needRefresh = true;
+        if (stateChanged && mLayoutManager.findFirstVisibleItemPosition() == 0) {
+            stateChanged = false;
+            notifyItemChanged(0);
         }
     }
 
@@ -86,7 +84,13 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.BaseVi
                 if (mLayoutManager != null){
                     mLayoutManager.scrollToPositionWithOffset(i, 0);
                     if (TextUtils.equals(index.substring(0, 1), "定")) {
-                        refreshLocationItem();
+                        //防止滚动时进行刷新
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (stateChanged) notifyItemChanged(0);
+                            }
+                        }, 1000);
                     }
                     return;
                 }

@@ -99,7 +99,7 @@ public class CityPickerDialogFragment extends AppCompatDialogFragment implements
 
     private void initLocatedCity() {
         if (mLocatedCity == null){
-            mLocatedCity = new LocatedCity("定位失败", "未知", "0");
+            mLocatedCity = new LocatedCity(getString(R.string.cp_locating), "未知", "0");
             locateState = LocateState.FAILURE;
         }else{
             locateState = LocateState.SUCCESS;
@@ -150,10 +150,10 @@ public class CityPickerDialogFragment extends AppCompatDialogFragment implements
         mAdapter.setInnerListener(this);
         mAdapter.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        //修复定位城市不刷新的bug
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                //确保定位城市能正常刷新
                 if (newState == RecyclerView.SCROLL_STATE_IDLE){
                     mAdapter.refreshLocationItem();
                 }

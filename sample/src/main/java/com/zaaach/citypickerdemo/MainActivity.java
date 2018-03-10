@@ -103,9 +103,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        CityPicker.getInstance()
-                                                .locateComplete(new LocatedCity("深圳", "广东", "101280601"),
-                                                        LocateState.SUCCESS);
+                                        CityPicker.getInstance().locateComplete(new LocatedCity("深圳", "广东", "101280601"), LocateState.SUCCESS);
                                     }
                                 }, 3000);
                             }
