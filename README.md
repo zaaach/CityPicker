@@ -172,6 +172,10 @@ OK，enjoy it~
 
 # Changelog 
 
+#### v2.0.2
+
+-   修复定位城市偶尔不刷新的bug
+
 #### v2.0.1
 
 -   新增定位接口
@@ -182,16 +186,6 @@ OK，enjoy it~
 -   项目重构优化，结构更清晰
 -   使用RecyclerView
 
-如果有什么问题可以加入QQ交流群：601783167
+# QQ群
 
-# 赞赏
-
-如果你喜欢 **CityPicker** 的设计，觉得帮助到了你，可以点右上角 "Star" 支持一下，谢谢！(〃'▽'〃)
-
-你也还可以扫描下面的二维码，请作者喝一杯咖啡~
-
-![image](https://github.com/zaaach/CityPicker/raw/master/art/alipay.png) ![image](https://github.com/zaaach/CityPicker/raw/master/art/wxpay.png)
-
-如果在捐赠留言中备注名称，将会被记录到列表中~ 捐赠时可以留下你的github项目地址或个人主页地址，链接将添加到列表中起到互相推广的作用。
-
-#### [捐赠列表]( https://github.com/zaaach/CityPicker/blob/master/art/donationlist.md)
+有兴趣可以加入QQ群一起交流：601783167
