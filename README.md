@@ -34,7 +34,7 @@
 Gradle:
 
 ```groovy
-implementation 'com.zaaach:citypicker:2.0.1'
+implementation 'com.zaaach:citypicker:2.0.2'
 ```
 
 or Maven:
@@ -43,7 +43,7 @@ or Maven:
 <dependency>
   <groupId>com.zaaach</groupId>
   <artifactId>citypicker</artifactId>
-  <version>2.0.1</version>
+  <version>2.0.2</version>
   <type>pom</type>
 </dependency>
 ```
