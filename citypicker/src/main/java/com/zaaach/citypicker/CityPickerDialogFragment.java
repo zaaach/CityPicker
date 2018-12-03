@@ -1,22 +1,31 @@
 package com.zaaach.citypicker;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
-import android.support.v7.app.AppCompatDialogFragment;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,7 +48,7 @@ import java.util.List;
  * @Author: Bro0cL
  * @Date: 2018/2/6 20:50
  */
-public class CityPickerDialogFragment extends AppCompatDialogFragment implements TextWatcher,
+public class CityPickerDialogFragment extends BottomSheetDialogFragment implements TextWatcher,
         View.OnClickListener, SideIndexBar.OnIndexTouchedChangedListener, InnerListener {
     private View mContentView;
     private RecyclerView mRecyclerView;
@@ -63,6 +72,7 @@ public class CityPickerDialogFragment extends AppCompatDialogFragment implements
     private LocatedCity mLocatedCity;
     private int locateState;
     private OnPickListener mOnPickListener;
+    private BottomSheetBehavior<FrameLayout> mBehavior;
 
     /**
      * 获取实例
@@ -80,7 +90,6 @@ public class CityPickerDialogFragment extends AppCompatDialogFragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(STYLE_NO_TITLE, R.style.CityPickerStyle);
 
         Bundle args = getArguments();
         if (args != null) {
@@ -90,7 +99,7 @@ public class CityPickerDialogFragment extends AppCompatDialogFragment implements
         initHotCities();
         initLocatedCity();
 
-        dbManager = new DBManager(getContext());
+        dbManager = new DBManager(getActivity());
         mAllCities = dbManager.getAllCities();
         mAllCities.add(0, mLocatedCity);
         mAllCities.add(1, new HotCity("热门城市", "未知", "0"));
@@ -100,7 +109,7 @@ public class CityPickerDialogFragment extends AppCompatDialogFragment implements
     private void initLocatedCity() {
         if (mLocatedCity == null){
             mLocatedCity = new LocatedCity(getString(R.string.cp_locating), "未知", "0");
-            locateState = LocateState.FAILURE;
+            locateState = LocateState.LOCATING;
         }else{
             locateState = LocateState.SUCCESS;
         }
@@ -132,7 +141,7 @@ public class CityPickerDialogFragment extends AppCompatDialogFragment implements
     }
 
     public void setAnimationStyle(@StyleRes int style){
-        this.mAnimStyle = style <= 0 ? R.style.DefaultCityPickerAnimation : style;
+        this.mAnimStyle = style;
     }
 
     @Nullable
@@ -147,6 +156,7 @@ public class CityPickerDialogFragment extends AppCompatDialogFragment implements
         mRecyclerView.addItemDecoration(new SectionItemDecoration(getActivity(), mAllCities), 0);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity()), 1);
         mAdapter = new CityListAdapter(getActivity(), mAllCities, mHotCities, locateState);
+        mAdapter.autoLocate(true);
         mAdapter.setInnerListener(this);
         mAdapter.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -157,6 +167,10 @@ public class CityPickerDialogFragment extends AppCompatDialogFragment implements
                 if (newState == RecyclerView.SCROLL_STATE_IDLE){
                     mAdapter.refreshLocationItem();
                 }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             }
         });
 
@@ -178,20 +192,60 @@ public class CityPickerDialogFragment extends AppCompatDialogFragment implements
         return mContentView;
     }
 
-    @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = super.onCreateDialog(savedInstanceState);
-        Window window = dialog.getWindow();
-        if(window != null) {
-            window.getDecorView().setPadding(0, 0, 0, 0);
-            window.setBackgroundDrawableResource(android.R.color.transparent);
-            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+    public void onStart() {
+        super.onStart();
+        Window window = getDialog().getWindow();
+        if (window != null) {
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
             if (enableAnim) {
                 window.setWindowAnimations(mAnimStyle);
             }
         }
-        return dialog;
+        BottomSheetDialog dialog  = (BottomSheetDialog) getDialog();
+        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK){
+                    if (mOnPickListener != null){
+                        mOnPickListener.onCancel();
+                    }
+                }
+                return false;
+            }
+        });
+        dialog.setOnDismissListener(this);
+        FrameLayout bottomSheet = dialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet);
+        if (bottomSheet != null) {
+            CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) bottomSheet.getLayoutParams();
+            lp.height = getHeight();
+            mBehavior = BottomSheetBehavior.from(bottomSheet);
+            mBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            mBehavior.setHideable(true);
+        }
+    }
+
+    private int getHeight() {
+        int height = 1920;
+        if (getContext() != null) {
+            WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+            Point point = new Point();
+            if (wm != null) {
+                // 使用Point已经减去了状态栏高度
+                wm.getDefaultDisplay().getSize(point);
+                height = point.y;
+            }
+        }
+        return height;
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        if (getContext() == null) {
+            return super.onCreateDialog(savedInstanceState);
+        }
+        return new BottomSheetDialog(getContext(), R.style.CityPickerStyle);
     }
 
     /** 搜索框监听 */
@@ -229,11 +283,15 @@ public class CityPickerDialogFragment extends AppCompatDialogFragment implements
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.cp_cancel) {
-            dismiss(-1, null);
+            dismiss();
+            if (mOnPickListener != null){
+                mOnPickListener.onCancel();
+            }
         }else if(id == R.id.cp_clear_all){
             mSearchBox.setText("");
         }
     }
+
 
     @Override
     public void onIndexChanged(String index, int position) {

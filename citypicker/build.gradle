@@ -6,8 +6,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 27
-        versionCode 5
-        versionName "2.0.2"
+        versionCode 6
+        versionName "2.0.3"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -30,13 +30,14 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     compileOnly 'com.android.support:appcompat-v7:27.1.1'
     compileOnly 'com.android.support:recyclerview-v7:27.1.1'
+    api 'com.android.support:design:27.1.1'
 }
 
 
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = "2.0.2"
+version = "2.0.3"
 
 def siteUrl = 'https://github.com/zaaach/CityPicker.git'
 def gitUrl = 'git@github.com:zaaach/CityPicker.git'

@@ -78,8 +78,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         findViewById(R.id.btn_pick).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CityPicker.getInstance()
-                        .setFragmentManager(getSupportFragmentManager())
+                CityPicker.from(MainActivity.this)
                         .enableAnimation(enable)
                         .setAnimationStyle(anim)
                         .setLocatedCity(null)
@@ -87,14 +86,17 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                         .setOnPickListener(new OnPickListener() {
                             @Override
                             public void onPick(int position, City data) {
-                                currentTV.setText(data == null ? "杭州" : String.format("当前城市：%s，%s", data.getName(), data.getCode()));
-                                if (data != null) {
-                                    Toast.makeText(
-                                            getApplicationContext(),
-                                            String.format("点击的数据：%s，%s", data.getName(), data.getCode()),
-                                            Toast.LENGTH_SHORT)
-                                            .show();
-                                }
+                                currentTV.setText(String.format("当前城市：%s，%s", data.getName(), data.getCode()));
+                                Toast.makeText(
+                                        getApplicationContext(),
+                                        String.format("点击的数据：%s，%s", data.getName(), data.getCode()),
+                                        Toast.LENGTH_SHORT)
+                                        .show();
+                            }
+
+                            @Override
+                            public void onCancel() {
+                                Toast.makeText(getApplicationContext(), "取消选择", Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
@@ -103,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        CityPicker.getInstance().locateComplete(new LocatedCity("深圳", "广东", "101280601"), LocateState.SUCCESS);
+                                        CityPicker.from(MainActivity.this).locateComplete(new LocatedCity("深圳", "广东", "101280601"), LocateState.SUCCESS);
                                     }
                                 }, 3000);
                             }
