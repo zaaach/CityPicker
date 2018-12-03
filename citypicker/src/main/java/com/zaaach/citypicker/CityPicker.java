@@ -2,14 +2,16 @@ package com.zaaach.citypicker;
 
 import android.support.annotation.StyleRes;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import com.zaaach.citypicker.adapter.OnPickListener;
+import com.zaaach.citypicker.model.HotCity;
 import com.zaaach.citypicker.model.LocateState;
 import com.zaaach.citypicker.model.LocatedCity;
-import com.zaaach.citypicker.model.HotCity;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 /**
@@ -19,23 +21,9 @@ import java.util.List;
 public class CityPicker {
     private static final String TAG = "CityPicker";
 
-    private static CityPicker mInstance;
-
-    private CityPicker(){}
-
-    public static CityPicker getInstance(){
-        if (mInstance == null){
-            synchronized (CityPicker.class){
-                if (mInstance == null){
-                    mInstance = new CityPicker();
-                }
-            }
-        }
-        return mInstance;
-    }
-
-    private FragmentManager mFragmentManager;
-    private Fragment mTargetFragment;
+    private WeakReference<FragmentActivity> mContext;
+    private WeakReference<Fragment> mFragment;
+    private WeakReference<FragmentManager> mFragmentManager;
 
     private boolean enableAnim;
     private int mAnimStyle;
@@ -43,14 +31,29 @@ public class CityPicker {
     private List<HotCity> mHotCities;
     private OnPickListener mOnPickListener;
 
-    public CityPicker setFragmentManager(FragmentManager fm) {
-        this.mFragmentManager = fm;
-        return this;
+    private CityPicker(){}
+
+    private CityPicker(Fragment fragment){
+        this(fragment.getActivity(), fragment);
+        mFragmentManager = new WeakReference<>(fragment.getChildFragmentManager());
     }
 
-    public CityPicker setTargetFragment(Fragment targetFragment) {
-        this.mTargetFragment = targetFragment;
-        return this;
+    private CityPicker(FragmentActivity activity){
+        this(activity, null);
+        mFragmentManager = new WeakReference<>(activity.getSupportFragmentManager());
+    }
+
+    private CityPicker(FragmentActivity activity, Fragment fragment){
+        mContext = new WeakReference<>(activity);
+        mFragment = new WeakReference<>(fragment);
+    }
+
+    public static CityPicker from(Fragment fragment){
+        return new CityPicker(fragment);
+    }
+
+    public static CityPicker from(FragmentActivity activity){
+        return new CityPicker(activity);
     }
 
     /**
@@ -99,14 +102,11 @@ public class CityPicker {
     }
 
     public void show(){
-        if (mFragmentManager == null){
-           throw new UnsupportedOperationException("CityPicker：method setFragmentManager() must be called.");
-        }
-        FragmentTransaction ft = mFragmentManager.beginTransaction();
-        final Fragment prev = mFragmentManager.findFragmentByTag(TAG);
+        FragmentTransaction ft = mFragmentManager.get().beginTransaction();
+        final Fragment prev = mFragmentManager.get().findFragmentByTag(TAG);
         if (prev != null){
             ft.remove(prev).commit();
-            ft = mFragmentManager.beginTransaction();
+            ft = mFragmentManager.get().beginTransaction();
         }
         ft.addToBackStack(null);
         final CityPickerDialogFragment cityPickerFragment =
@@ -115,9 +115,6 @@ public class CityPicker {
         cityPickerFragment.setHotCities(mHotCities);
         cityPickerFragment.setAnimationStyle(mAnimStyle);
         cityPickerFragment.setOnPickListener(mOnPickListener);
-        if (mTargetFragment != null){
-            cityPickerFragment.setTargetFragment(mTargetFragment, 0);
-        }
         cityPickerFragment.show(ft, TAG);
     }
 
@@ -127,7 +124,7 @@ public class CityPicker {
      * @param state
      */
     public void locateComplete(LocatedCity location, @LocateState.State int state){
-        CityPickerDialogFragment fragment = (CityPickerDialogFragment) mFragmentManager.findFragmentByTag(TAG);
+        CityPickerDialogFragment fragment = (CityPickerDialogFragment) mFragmentManager.get().findFragmentByTag(TAG);
         if (fragment != null){
             fragment.locationChanged(location, state);
         }

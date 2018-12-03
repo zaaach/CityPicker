@@ -34,7 +34,8 @@
 Gradle:
 
 ```groovy
-implementation 'com.zaaach:citypicker:2.0.2'
+implementation 'com.zaaach:citypicker:2.0.3'	//必选
+implementation 'com.android.support:recyclerview-v7:27.1.1'		//必选
 ```
 
 or Maven:
@@ -43,7 +44,7 @@ or Maven:
 <dependency>
   <groupId>com.zaaach</groupId>
   <artifactId>citypicker</artifactId>
-  <version>2.0.2</version>
+  <version>2.0.3</version>
   <type>pom</type>
 </dependency>
 ```
@@ -72,18 +73,17 @@ or 下载library手动导入.
 
 ```java
 List<HotCity> hotCities = new ArrayList<>();
-hotCities.add(new HotCity("北京", "北京", "101010100"));
+hotCities.add(new HotCity("北京", "北京", "101010100")); //code为城市代码
 hotCities.add(new HotCity("上海", "上海", "101020100"));
 hotCities.add(new HotCity("广州", "广东", "101280101"));
 hotCities.add(new HotCity("深圳", "广东", "101280601"));
 hotCities.add(new HotCity("杭州", "浙江", "101210101"));
 ......
 
-CityPicker.getInstance()
-  .setFragmentManager(getSupportFragmentManager())	//此方法必须调用
+CityPicker.from(activity) //activity或者fragment
   .enableAnimation(true)	//启用动画效果
   .setAnimationStyle(anim)	//自定义动画
-  .setLocatedCity(new LocatedCity("杭州", "浙江", "101210101")))  //APP自身已定位的城市，默认为null（定位失败）
+  .setLocatedCity(new LocatedCity("杭州", "浙江", "101210101")))  //APP自身已定位的城市，传null会自动定位（默认）
   .setHotCities(hotCities)	//指定热门城市
   .setOnPickListener(new OnPickListener() {
     @Override
@@ -92,8 +92,13 @@ CityPicker.getInstance()
     }
       
     @Override
+    public void onCancel(){
+      Toast.makeText(getApplicationContext(), "取消选择", Toast.LENGTH_SHORT).show();     
+    }
+      
+    @Override
     public void onLocate() {
-      //开始定位，这里模拟一下定位
+      //定位接口，需要APP自身实现，这里模拟一下定位
       new Handler().postDelayed(new Runnable() {
         @Override
         public void run() {
@@ -101,7 +106,7 @@ CityPicker.getInstance()
           CityPicker.getInstance()
             .locateComplete(new LocatedCity("深圳", "广东", "101280601"), LocateState.SUCCESS);
         }
-      }, 2000);
+      }, 3000);
     }
   })
   .show();
@@ -171,6 +176,12 @@ CityPicker.getInstance()
 OK，enjoy it~
 
 # Changelog 
+
+#### v2.0.3
+
+-   修复状态栏变黑问题
+-   新增取消选择监听
+-   方法调用方式稍微改变
 
 #### v2.0.2
 

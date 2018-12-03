@@ -2,6 +2,7 @@ package com.zaaach.citypicker.adapter;
 
 import android.content.Context;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,7 +29,7 @@ import java.util.List;
  * @Date: 2018/2/5 12:06
  */
 public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.BaseViewHolder> {
-    private static final int VIEW_TYPE_CURRENT = 10;
+    private static final int VIEW_TYPE_LOCATION = 10;
     private static final int VIEW_TYPE_HOT     = 11;
 
     private Context mContext;
@@ -38,12 +39,17 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.BaseVi
     private InnerListener mInnerListener;
     private LinearLayoutManager mLayoutManager;
     private boolean stateChanged;
+    private boolean autoLocate;
 
     public CityListAdapter(Context context, List<City> data, List<HotCity> hotData, int state) {
         this.mData = data;
         this.mContext = context;
         this.mHotData = hotData;
         this.locateState = state;
+    }
+
+    public void autoLocate(boolean auto){
+        autoLocate = auto;
     }
 
     public void setLayoutManager(LinearLayoutManager manager){
@@ -98,11 +104,12 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.BaseVi
         }
     }
 
+    @NonNull
     @Override
-    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         switch (viewType){
-            case VIEW_TYPE_CURRENT:
+            case VIEW_TYPE_LOCATION:
                 view = LayoutInflater.from(mContext).inflate(R.layout.cp_list_item_location_layout, parent, false);
                 return new LocationViewHolder(view);
             case VIEW_TYPE_HOT:
@@ -115,8 +122,7 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.BaseVi
     }
 
     @Override
-    public void onBindViewHolder(BaseViewHolder holder, int position) {
-        if (holder == null) return;
+    public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         if (holder instanceof DefaultViewHolder){
             final int pos = holder.getAdapterPosition();
             final City data = mData.get(pos);
@@ -177,6 +183,11 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.BaseVi
                     }
                 }
             });
+            //第一次弹窗，如果未定位则自动定位
+            if (autoLocate && locateState == LocateState.LOCATING && mInnerListener != null){
+                mInnerListener.locate();
+                autoLocate = false;
+            }
         }
         //热门城市
         if (holder instanceof HotViewHolder){
@@ -197,7 +208,7 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.BaseVi
     @Override
     public int getItemViewType(int position) {
         if (position == 0 && TextUtils.equals("定", mData.get(position).getSection().substring(0, 1)))
-            return VIEW_TYPE_CURRENT;
+            return VIEW_TYPE_LOCATION;
         if (position == 1 && TextUtils.equals("热", mData.get(position).getSection().substring(0, 1)))
             return VIEW_TYPE_HOT;
         return super.getItemViewType(position);
