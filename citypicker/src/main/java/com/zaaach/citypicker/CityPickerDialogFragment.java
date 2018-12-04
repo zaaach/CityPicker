@@ -1,9 +1,9 @@
 package com.zaaach.citypicker;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,7 +17,8 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -193,6 +194,11 @@ public class CityPickerDialogFragment extends BottomSheetDialogFragment implemen
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         Window window = getDialog().getWindow();
@@ -222,19 +228,35 @@ public class CityPickerDialogFragment extends BottomSheetDialogFragment implemen
             mBehavior = BottomSheetBehavior.from(bottomSheet);
             mBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             mBehavior.setHideable(true);
+            mBehavior.setSkipCollapsed(true);
+            mBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+                @Override
+                public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                    if (newState == BottomSheetBehavior.STATE_HIDDEN){
+                        if (mOnPickListener != null){
+                            mOnPickListener.onCancel();
+                        }
+                    }
+                }
+
+                @Override
+                public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                }
+            });
         }
     }
 
     private int getHeight() {
-        int height = 1920;
-        if (getContext() != null) {
-            WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        int height;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            DisplayMetrics dm = new DisplayMetrics();
+            getActivity().getWindowManager().getDefaultDisplay().getRealMetrics(dm);
             Point point = new Point();
-            if (wm != null) {
-                // 使用Point已经减去了状态栏高度
-                wm.getDefaultDisplay().getSize(point);
-                height = point.y;
-            }
+            getActivity().getWindowManager().getDefaultDisplay().getSize(point);
+            height = point.y;
+        }else{
+            DisplayMetrics dm = getResources().getDisplayMetrics();
+            height = dm.heightPixels;
         }
         return height;
     }
