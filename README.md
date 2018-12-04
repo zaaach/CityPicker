@@ -23,22 +23,34 @@
 # Preview
 
 ![image](https://github.com/zaaach/CityPicker/raw/master/art/screen.gif) ![image](https://github.com/zaaach/CityPicker/raw/master/art/screen1.gif)
-![image](https://github.com/zaaach/CityPicker/raw/master/art/screen2.gif) ![image](https://github.com/zaaach/CityPicker/raw/master/art/screen3.gif)
+![image](https://github.com/zaaach/CityPicker/raw/master/art/screen2.gif)
 
 # APK
 
 下载[demo.apk](https://github.com/zaaach/CityPicker/raw/master/art/demo.apk)体验.
 
-# Install
+# Download
 
-Gradle:
+library已上传 **Jitpack**，需要在root build.gradle里添加如下代码：
 
 ```groovy
-implementation 'com.zaaach:citypicker:2.0.3'	//必选
-implementation 'com.android.support:recyclerview-v7:27.1.1'		//必选
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+add dependency：
+
+```groovy
+dependencies {
+	implementation 'com.github.zaaach:CityPicker:2.0.3'	//必选
+	implementation 'com.android.support:recyclerview-v7:27.1.1'	//必选
+}
 ```
 
-or Maven:
+or Maven：
 
 ```xml
 <dependency>
@@ -81,7 +93,7 @@ hotCities.add(new HotCity("杭州", "浙江", "101210101"));
 ......
 
 CityPicker.from(activity) //activity或者fragment
-  .enableAnimation(true)	//启用动画效果
+  .enableAnimation(true)	//启用动画效果，默认无
   .setAnimationStyle(anim)	//自定义动画
   .setLocatedCity(new LocatedCity("杭州", "浙江", "101210101")))  //APP自身已定位的城市，传null会自动定位（默认）
   .setHotCities(hotCities)	//指定热门城市
@@ -197,6 +209,10 @@ OK，enjoy it~
 
 -   项目重构优化，结构更清晰
 -   使用RecyclerView
+
+# 感谢
+
+[ImmersionBar](https://github.com/gyf-dev/ImmersionBar)
 
 # QQ群
 
