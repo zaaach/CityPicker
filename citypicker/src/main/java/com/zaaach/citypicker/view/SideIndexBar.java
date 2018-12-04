@@ -41,6 +41,12 @@ public class SideIndexBar extends View{
     private TextView mOverlayTextView;
     private OnIndexTouchedChangedListener mOnIndexChangedListener;
 
+    private int navigationBarHeight;
+
+    public void setNavigationBarHeight(int height){
+        this.navigationBarHeight = height;
+    }
+
     public SideIndexBar(Context context) {
         this(context, null);
     }
@@ -95,7 +101,13 @@ public class SideIndexBar extends View{
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         mWidth = getWidth();
-        mHeight = Math.max(h, oldh);
+        if (Math.abs(h - oldh) == navigationBarHeight){
+            //底部导航栏隐藏或显示
+            mHeight = h;
+        }else {
+            //避免软键盘弹出时挤压
+            mHeight = Math.max(getHeight(), oldh);
+        }
         mItemHeight = mHeight / mIndexItems.size();
         mTopMargin = (mHeight - mItemHeight * mIndexItems.size()) / 2;
     }
