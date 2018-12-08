@@ -31,21 +31,11 @@
 
 # Download
 
-library已上传 **Jitpack**，需要在root build.gradle里添加如下代码：
-
-```groovy
-allprojects {
-    repositories {
-        ...
-        maven { url 'https://jitpack.io' }
-    }
-}
-```
-add dependency：
+Gradle：
 
 ```groovy
 dependencies {
-	implementation 'com.github.zaaach:CityPicker:2.0.3'	//必选
+	implementation 'com.zaaach:CityPicker:2.0.3'	//必选
 	implementation 'com.android.support:recyclerview-v7:27.1.1'	//必选
 }
 ```
