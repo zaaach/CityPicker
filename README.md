@@ -35,7 +35,7 @@ Gradle：
 
 ```groovy
 dependencies {
-	implementation 'com.zaaach:CityPicker:2.0.3'	//必选
+	implementation 'com.zaaach:citypicker:2.0.3'	//必选
 	implementation 'com.android.support:recyclerview-v7:27.1.1'	//必选
 }
 ```
