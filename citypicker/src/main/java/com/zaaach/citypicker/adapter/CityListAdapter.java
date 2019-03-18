@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.zaaach.citypicker.CityPicker;
 import com.zaaach.citypicker.R;
 import com.zaaach.citypicker.adapter.decoration.GridItemDecoration;
 import com.zaaach.citypicker.model.City;
@@ -209,7 +210,7 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.BaseVi
     public int getItemViewType(int position) {
         if (position == 0 && TextUtils.equals("定", mData.get(position).getSection().substring(0, 1)))
             return VIEW_TYPE_LOCATION;
-        if (position == 1 && TextUtils.equals("热", mData.get(position).getSection().substring(0, 1)))
+        if (position == 1 && TextUtils.equals(CityPicker.mHotCityText.substring(0, 1), mData.get(position).getSection().substring(0, 1)))
             return VIEW_TYPE_HOT;
         return super.getItemViewType(position);
     }
