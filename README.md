@@ -87,6 +87,7 @@ CityPicker.from(activity) //activity或者fragment
   .setAnimationStyle(anim)	//自定义动画
   .setLocatedCity(new LocatedCity("杭州", "浙江", "101210101")))  //APP自身已定位的城市，传null会自动定位（默认）
   .setHotCities(hotCities)	//指定热门城市
+  .setHotCityText("热门城市")   //指定“热门城市”位置显示文字
   .setOnPickListener(new OnPickListener() {
     @Override
     public void onPick(int position, City data) {
