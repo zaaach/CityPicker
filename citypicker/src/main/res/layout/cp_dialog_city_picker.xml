@@ -6,35 +6,43 @@
 
     <include layout="@layout/cp_search_view" />
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/cp_city_recyclerview"
+        <RelativeLayout
+            android:id="@+id/show_select_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"/>
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/cp_overlay"
-            android:layout_width="?attr/cpOverlayWidth"
-            android:layout_height="?attr/cpOverlayHeight"
-            android:visibility="gone"
-            android:gravity="center"
-            android:layout_centerInParent="true"
-            android:textSize="?attr/cpOverlayTextSize"
-            android:textColor="?attr/cpOverlayTextColor"
-            android:background="?attr/cpOverlayBackground"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/cp_city_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white" />
 
-        <!--右侧字母导航-->
-        <com.zaaach.citypicker.view.SideIndexBar
-            android:id="@+id/cp_side_index_bar"
-            android:layout_width="@dimen/cp_index_bar_width"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
+            <TextView
+                android:id="@+id/cp_overlay"
+                android:layout_width="?attr/cpOverlayWidth"
+                android:layout_height="?attr/cpOverlayHeight"
+                android:layout_centerInParent="true"
+                android:background="?attr/cpOverlayBackground"
+                android:gravity="center"
+                android:textColor="?attr/cpOverlayTextColor"
+                android:textSize="?attr/cpOverlayTextSize"
+                android:visibility="gone" />
 
-        <include layout="@layout/cp_empty_view"/>
-    </RelativeLayout>
+            <!--右侧字母导航-->
+            <com.zaaach.citypicker.view.SideIndexBar
+                android:id="@+id/cp_side_index_bar"
+                android:layout_width="@dimen/cp_index_bar_width"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true" />
+
+        </RelativeLayout>
+
+        <include layout="@layout/cp_empty_view" />
+
+    </FrameLayout>
 </LinearLayout>
