@@ -1,11 +1,8 @@
 package com.zaaach.citypicker.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -15,6 +12,10 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.zaaach.citypicker.R;
 import com.zaaach.citypicker.adapter.decoration.GridItemDecoration;
 import com.zaaach.citypicker.model.City;
@@ -236,6 +237,7 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.BaseVi
     public static class HotViewHolder extends BaseViewHolder {
         RecyclerView mRecyclerView;
 
+        @SuppressLint("WrongConstant")
         HotViewHolder(View itemView) {
             super(itemView);
             mRecyclerView = itemView.findViewById(R.id.cp_hot_list);

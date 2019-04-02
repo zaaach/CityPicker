@@ -5,12 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StyleRes;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -26,12 +21,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StyleRes;
+import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.zaaach.citypicker.adapter.CityListAdapter;
 import com.zaaach.citypicker.adapter.InnerListener;
 import com.zaaach.citypicker.adapter.OnPickListener;
 import com.zaaach.citypicker.adapter.decoration.DividerItemDecoration;
 import com.zaaach.citypicker.adapter.decoration.SectionItemDecoration;
 import com.zaaach.citypicker.db.DBManager;
+import com.zaaach.citypicker.db.DefaultDBManager;
 import com.zaaach.citypicker.model.City;
 import com.zaaach.citypicker.model.HotCity;
 import com.zaaach.citypicker.model.LocateState;
@@ -122,6 +124,7 @@ public class CityPickerDialogFragment extends DialogFragment implements TextWatc
         initViews();
     }
 
+    @SuppressLint("WrongConstant")
     private void initViews() {
         mRecyclerView = mContentView.findViewById(R.id.cp_city_recyclerview);
         mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -190,8 +193,9 @@ public class CityPickerDialogFragment extends DialogFragment implements TextWatc
         }else{
             locateState = LocateState.SUCCESS;
         }
-
-        dbManager = new DBManager(getActivity());
+        if(dbManager == null){
+            dbManager = new DefaultDBManager(getActivity());
+        }
         mAllCities = dbManager.getAllCities();
         mAllCities.add(0, mLocatedCity);
         mAllCities.add(1, new HotCity("热门城市", "未知", "0"));
@@ -256,7 +260,11 @@ public class CityPickerDialogFragment extends DialogFragment implements TextWatc
             mResults = mAllCities;
             ((SectionItemDecoration)(mRecyclerView.getItemDecorationAt(0))).setData(mResults);
             mAdapter.updateData(mResults);
-        }else {
+        }else if(keyword.trim().isEmpty()){
+            // 实现禁用Enter键的效果
+            mSearchBox.setText("");
+        }
+        else {
             mClearAllBtn.setVisibility(View.VISIBLE);
             //开始数据库查找
             mResults = dbManager.searchCity(keyword);
@@ -291,8 +299,15 @@ public class CityPickerDialogFragment extends DialogFragment implements TextWatc
         mAdapter.scrollToSection(index);
     }
 
-    public void locationChanged(LocatedCity location, int state){
-        mAdapter.updateLocateState(location, state);
+    public void locationChanged(final LocatedCity location, final int state){
+        // 防止在RecycleView不可见的时候定位成功无法刷新 RecycleView
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.updateLocateState(location, state);
+            }
+        },300);
+
     }
 
     @Override
@@ -312,5 +327,9 @@ public class CityPickerDialogFragment extends DialogFragment implements TextWatc
 
     public void setOnPickListener(OnPickListener listener){
         this.mOnPickListener = listener;
+    }
+
+    public void setDBManager(DBManager defaultDbManager){
+        this.dbManager = defaultDbManager;
     }
 }
