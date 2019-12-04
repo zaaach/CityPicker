@@ -1,3 +1,7 @@
+# 更新
+> :mega::mega::mega:
+> 近期计划下个版本重构！请大家继续关注~
+
 <p align="center">
 <img src="art/header.png">
 </p>
