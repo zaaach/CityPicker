@@ -1,15 +1,13 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-group='com.github.zaaach'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    buildToolsVersion "28.0.3"
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 17
         targetSdkVersion 27
         versionCode 7
-        versionName "2.0.3"
+        versionName "2.0.4"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -30,5 +28,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     compileOnly 'com.android.support:appcompat-v7:27.1.1'
     compileOnly 'com.android.support:recyclerview-v7:27.1.1'
-    api 'com.android.support:design:27.1.1'
+    compileOnly 'com.android.support:design:27.1.1'
 }

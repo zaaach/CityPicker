@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/cp_city_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -32,7 +32,7 @@
             android:id="@+id/cp_side_index_bar"
             android:layout_width="@dimen/cp_index_bar_width"
             android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"/>
 
         <include layout="@layout/cp_empty_view"/>
