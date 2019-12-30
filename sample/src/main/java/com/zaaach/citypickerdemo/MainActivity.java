@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                         .setAnimationStyle(anim)
                         .setLocatedCity(null)
                         .setHotCities(hotCities)
+                        .setHotCityText("当前开通城市")
                         .setOnPickListener(new OnPickListener() {
                             @Override
                             public void onPick(int position, City data) {

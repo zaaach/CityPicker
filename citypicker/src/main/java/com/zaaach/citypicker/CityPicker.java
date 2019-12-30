@@ -19,6 +19,7 @@ import java.util.List;
  * @Date: 2018/2/6 17:52
  */
 public class CityPicker {
+
     private static final String TAG = "CityPicker";
 
     private WeakReference<FragmentActivity> mContext;
@@ -30,6 +31,7 @@ public class CityPicker {
     private LocatedCity mLocation;
     private List<HotCity> mHotCities;
     private OnPickListener mOnPickListener;
+    public static String mHotCityText = "热门城市";
 
     private CityPicker(){}
 
@@ -76,6 +78,11 @@ public class CityPicker {
         return this;
     }
 
+    public CityPicker setHotCityText(String text) {
+        this.mHotCityText = text;
+        return this;
+    }
+
     public CityPicker setHotCities(List<HotCity> data){
         this.mHotCities = data;
         return this;
@@ -113,6 +120,7 @@ public class CityPicker {
                 CityPickerDialogFragment.newInstance(enableAnim);
         cityPickerFragment.setLocatedCity(mLocation);
         cityPickerFragment.setHotCities(mHotCities);
+        cityPickerFragment.setHotCityText(mHotCityText);
         cityPickerFragment.setAnimationStyle(mAnimStyle);
         cityPickerFragment.setOnPickListener(mOnPickListener);
         cityPickerFragment.show(ft, TAG);

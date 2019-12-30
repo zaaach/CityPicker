@@ -62,6 +62,7 @@ public class CityPickerDialogFragment extends DialogFragment implements TextWatc
     private List<City> mAllCities;
     private List<HotCity> mHotCities;
     private List<City> mResults;
+    private String mHotCityText;
 
     private DBManager dbManager;
 
@@ -76,10 +77,11 @@ public class CityPickerDialogFragment extends DialogFragment implements TextWatc
 
     /**
      * 获取实例
+     *
      * @param enable 是否启用动画效果
      * @return
      */
-    public static CityPickerDialogFragment newInstance(boolean enable){
+    public static CityPickerDialogFragment newInstance(boolean enable) {
         final CityPickerDialogFragment fragment = new CityPickerDialogFragment();
         Bundle args = new Bundle();
         args.putBoolean("cp_enable_anim", enable);
@@ -93,18 +95,24 @@ public class CityPickerDialogFragment extends DialogFragment implements TextWatc
         setStyle(STYLE_NORMAL, R.style.CityPickerStyle);
     }
 
-    public void setLocatedCity(LocatedCity location){
+    public void setLocatedCity(LocatedCity location) {
         mLocatedCity = location;
     }
 
-    public void setHotCities(List<HotCity> data){
-        if (data != null && !data.isEmpty()){
+    public void setHotCities(List<HotCity> data) {
+        if (data != null && !data.isEmpty()) {
             this.mHotCities = data;
         }
     }
 
+    public void setHotCityText(String text) {
+        if (!TextUtils.isEmpty(text)) {
+            this.mHotCityText = text;
+        }
+    }
+
     @SuppressLint("ResourceType")
-    public void setAnimationStyle(@StyleRes int resId){
+    public void setAnimationStyle(@StyleRes int resId) {
         this.mAnimStyle = resId <= 0 ? mAnimStyle : resId;
     }
 
@@ -138,7 +146,7 @@ public class CityPickerDialogFragment extends DialogFragment implements TextWatc
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 //确保定位城市能正常刷新
-                if (newState == RecyclerView.SCROLL_STATE_IDLE){
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     mAdapter.refreshLocationItem();
                 }
             }
@@ -184,17 +192,17 @@ public class CityPickerDialogFragment extends DialogFragment implements TextWatc
             mHotCities.add(new HotCity("武汉", "湖北", "101200101"));
         }
         //初始化定位城市，默认为空时会自动回调定位
-        if (mLocatedCity == null){
+        if (mLocatedCity == null) {
             mLocatedCity = new LocatedCity(getString(R.string.cp_locating), "未知", "0");
             locateState = LocateState.LOCATING;
-        }else{
+        } else {
             locateState = LocateState.SUCCESS;
         }
 
         dbManager = new DBManager(getActivity());
         mAllCities = dbManager.getAllCities();
         mAllCities.add(0, mLocatedCity);
-        mAllCities.add(1, new HotCity("热门城市", "未知", "0"));
+        mAllCities.add(1, new HotCity(mHotCityText, "未知", "0"));
         mResults = mAllCities;
     }
 
@@ -205,8 +213,8 @@ public class CityPickerDialogFragment extends DialogFragment implements TextWatc
         dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
             @Override
             public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK){
-                    if (mOnPickListener != null){
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    if (mOnPickListener != null) {
                         mOnPickListener.onCancel();
                     }
                 }
@@ -228,42 +236,46 @@ public class CityPickerDialogFragment extends DialogFragment implements TextWatc
 
     //测量宽高
     private void measure() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             DisplayMetrics dm = new DisplayMetrics();
             getActivity().getWindowManager().getDefaultDisplay().getRealMetrics(dm);
             height = dm.heightPixels;
             width = dm.widthPixels;
-        }else{
+        } else {
             DisplayMetrics dm = getResources().getDisplayMetrics();
             height = dm.heightPixels;
             width = dm.widthPixels;
         }
     }
 
-    /** 搜索框监听 */
+    /**
+     * 搜索框监听
+     */
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
 
     @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+    }
 
     @Override
     public void afterTextChanged(Editable s) {
         String keyword = s.toString();
-        if (TextUtils.isEmpty(keyword)){
+        if (TextUtils.isEmpty(keyword)) {
             mClearAllBtn.setVisibility(View.GONE);
             mEmptyView.setVisibility(View.GONE);
             mResults = mAllCities;
-            ((SectionItemDecoration)(mRecyclerView.getItemDecorationAt(0))).setData(mResults);
+            ((SectionItemDecoration) (mRecyclerView.getItemDecorationAt(0))).setData(mResults);
             mAdapter.updateData(mResults);
-        }else {
+        } else {
             mClearAllBtn.setVisibility(View.VISIBLE);
             //开始数据库查找
             mResults = dbManager.searchCity(keyword);
-            ((SectionItemDecoration)(mRecyclerView.getItemDecorationAt(0))).setData(mResults);
-            if (mResults == null || mResults.isEmpty()){
+            ((SectionItemDecoration) (mRecyclerView.getItemDecorationAt(0))).setData(mResults);
+            if (mResults == null || mResults.isEmpty()) {
                 mEmptyView.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 mEmptyView.setVisibility(View.GONE);
                 mAdapter.updateData(mResults);
             }
@@ -276,10 +288,10 @@ public class CityPickerDialogFragment extends DialogFragment implements TextWatc
         int id = v.getId();
         if (id == R.id.cp_cancel) {
             dismiss();
-            if (mOnPickListener != null){
+            if (mOnPickListener != null) {
                 mOnPickListener.onCancel();
             }
-        }else if(id == R.id.cp_clear_all){
+        } else if (id == R.id.cp_clear_all) {
             mSearchBox.setText("");
         }
     }
@@ -291,26 +303,26 @@ public class CityPickerDialogFragment extends DialogFragment implements TextWatc
         mAdapter.scrollToSection(index);
     }
 
-    public void locationChanged(LocatedCity location, int state){
+    public void locationChanged(LocatedCity location, int state) {
         mAdapter.updateLocateState(location, state);
     }
 
     @Override
     public void dismiss(int position, City data) {
         dismiss();
-        if (mOnPickListener != null){
+        if (mOnPickListener != null) {
             mOnPickListener.onPick(position, data);
         }
     }
 
     @Override
-    public void locate(){
-        if (mOnPickListener != null){
+    public void locate() {
+        if (mOnPickListener != null) {
             mOnPickListener.onLocate();
         }
     }
 
-    public void setOnPickListener(OnPickListener listener){
+    public void setOnPickListener(OnPickListener listener) {
         this.mOnPickListener = listener;
     }
 }
