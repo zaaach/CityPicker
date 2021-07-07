@@ -1,7 +1,3 @@
-# 更新
-> :mega::mega::mega:
-> 近期计划下个版本重构！请大家继续关注~
-
 <p align="center">
 <img src="art/header.png">
 </p>
@@ -35,27 +31,26 @@
 
 # Download
 
-Gradle：
+**1：** 项目根目录的build.gradle添加如下配置：
 
 ```groovy
-dependencies {
-	implementation 'com.zaaach:citypicker:2.0.3'	//必选
-	implementation 'com.android.support:recyclerview-v7:27.1.1'	//必选
+allprojects {
+	repositories {
+		...
+		maven { url 'https://jitpack.io' }
+	}
 }
 ```
 
-or Maven：
+**2：** app添加依赖：
 
-```xml
-<dependency>
-  <groupId>com.zaaach</groupId>
-  <artifactId>citypicker</artifactId>
-  <version>2.0.3</version>
-  <type>pom</type>
-</dependency>
+```groovy
+dependencies {
+	 implementation 'com.github.zaaach:CityPicker:x.y.z'
+}
 ```
 
-or 下载library手动导入.
+记得把`x.y.z`替换为[![jitpack](https://jitpack.io/v/zaaach/CityPicker.svg)](https://jitpack.io/#zaaach/CityPicker)中的数字
 
 # Usage
 
@@ -183,6 +178,10 @@ OK，enjoy it~
 
 # Changelog 
 
+#### v2.1.0
+
+- 迁移至AndroidX
+
 #### v2.0.3
 
 -   修复状态栏变黑问题
@@ -208,6 +207,19 @@ OK，enjoy it~
 
 [ImmersionBar](https://github.com/gyf-dev/ImmersionBar)
 
+# About me
+
+掘金：[ https://juejin.im/user/56f3dfe8efa6310055ac719f ](https://juejin.im/user/56f3dfe8efa6310055ac719f)
+
+简书：[ https://www.jianshu.com/u/913a8bb93d12 ](https://www.jianshu.com/u/913a8bb93d12)
+
+淘宝店：[ LEON家居生活馆 （动漫摆件）]( https://shop238932691.taobao.com)
+
+![LEON](https://raw.githubusercontent.com/zaaach/imgbed/master/arts/leon_shop_qrcode.png)
+
+:wink:淘宝店求个关注:wink:
 # QQ群
 
-有兴趣可以加入QQ群一起交流：601783167
+有兴趣可以加入QQ群一起交流：
+![扫码入群601783167](https://raw.githubusercontent.com/zaaach/imgbed/master/arts/qqgroup.jpg)
+
